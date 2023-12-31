@@ -1,0 +1,2 @@
+    ~/I/I/WarpedRealms/assets_/F/Sprites    master +36 !12 ?1  magick convert "Attack3.png" -crop 162x162 fantazy_warrior/attack3_%02d.png
+    ~/I/I/WarpedRealms/assets_/F/Sprites    master +36 !12 ?1 

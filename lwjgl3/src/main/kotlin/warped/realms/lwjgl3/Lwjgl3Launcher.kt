@@ -2,6 +2,7 @@
 
 package warped.realms.lwjgl3
 
+import com.badlogic.gdx.Graphics.DisplayMode
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration
 import warped.realms.WarpedRealms
@@ -12,8 +13,10 @@ fun main() {
     if (StartupHelper.startNewJvmIfRequired())
       return
     Lwjgl3Application(WarpedRealms(), Lwjgl3ApplicationConfiguration().apply {
-        setTitle("WarpedRealmsLootLabyrinth")
-        setWindowedMode(640, 480)
+        setTitle("WarpedRealms:LootLabyrinth")
+        setWindowedMode(1920, 1080)
+        //setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode())
+        //setResizable(false)
         setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
     })
 }
