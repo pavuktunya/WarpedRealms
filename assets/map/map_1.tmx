@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="24" tileheight="24" infinite="0" nextlayerid="6" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="24" tileheight="24" infinite="0" nextlayerid="7" nextobjectid="6">
  <tileset firstgid="1" name="map" tilewidth="24" tileheight="24" spacing="4" margin="2" tilecount="1296" columns="36">
   <image source="../graphics/background/map.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="1297" name="entities" tilewidth="162" tileheight="162" tilecount="2" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0" type="player">
+   <image width="162" height="162" source="../graphics/entities/fantazy_warrior.png"/>
+  </tile>
+  <tile id="1" type="rat">
+   <image width="64" height="64" source="../graphics/entities/rat.png"/>
+  </tile>
  </tileset>
  <layer id="2" name="bgd_1" width="30" height="20">
   <data encoding="base64" compression="zlib">
@@ -18,4 +27,10 @@
    eJxjYBgFgxHo0FnfKMANcIXpaFjjB2UD7YARCLClyXK6u2LwAXrk1dHyYBSgAwAg4gIi
   </data>
  </layer>
+ <objectgroup id="6" name="entities">
+  <object id="1" gid="1297" x="183" y="368.333" width="162" height="162"/>
+  <object id="2" gid="1298" x="412.667" y="326" width="64" height="64"/>
+  <object id="3" gid="1298" x="170.667" y="254" width="64" height="64"/>
+  <object id="4" gid="1298" x="433.333" y="110" width="64" height="64"/>
+ </objectgroup>
 </map>

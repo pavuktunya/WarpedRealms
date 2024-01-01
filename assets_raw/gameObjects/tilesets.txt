@@ -1,0 +1,19 @@
+    ~/I/I/WarpedRealms/assets_/g/Fantas/Sprites    master +93 !124 ?3  npx tile-extruder --tileWidth 162 --tileHeight 162 --extrusion 2 --input Run.png --output run_ext.png
+
+ Then go to the GDX TEXTURE PACKER
+ And padding -> 0
+ Create all your texture packs to one with no padding and no grid: just
+
+ Forse square,
+ Legacy,
+ Force PoT,
+ Use aliases,
+ Ignore blank imgs,
+ Use indices,
+ Limit memory
+
+
+ Then go to the TILED
+Height and weight your
+Margin: --extrusion
+Padding: 2*margin

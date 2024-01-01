@@ -22,8 +22,8 @@ import warped.realms.system.RenderSystem
 import warped.realms.world.World
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    private val texturePlayer = Texture("graphics/fantazy_warrior.png".toInternalFile(), true).apply { Texture.TextureFilter.Linear }
-    private val textureSlime = Texture("graphics/monster/rat/rat_idle.png".toInternalFile(), true).apply { Texture.TextureFilter.Linear }
+    //private val texturePlayer = Texture("graphics/fantazy_warrior.png".toInternalFile(), true).apply { Texture.TextureFilter.Linear }
+    private val textureSlime = Texture("graphics/monster/rat/idle_00.png".toInternalFile(), true).apply { Texture.TextureFilter.Linear }
 
     private val textureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
 
@@ -70,9 +70,10 @@ class Screen(game: WarpedRealms): AScreen(game) {
     override fun dispose() {
         super.dispose()
         world.dispose()
-        texturePlayer.disposeSafely()
+        //texturePlayer.disposeSafely()
         textureSlime.disposeSafely()
         textureAtlas.disposeSafely()
+        titledMap.disposeSafely()
     }
 
     companion object{
