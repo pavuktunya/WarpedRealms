@@ -1,5 +1,5 @@
 package warped.realms.world
 
-interface IObject {
+interface IDispose {
     fun dispose()
 }

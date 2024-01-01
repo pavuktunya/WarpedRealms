@@ -1,4 +1,4 @@
-package warped.realms.screens
+package warped.realms.screen
 
 import ktx.app.KtxScreen
 import warped.realms.WarpedRealms

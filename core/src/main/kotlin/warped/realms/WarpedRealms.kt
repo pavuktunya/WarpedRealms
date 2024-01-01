@@ -4,7 +4,7 @@ import com.badlogic.gdx.Application
 import com.badlogic.gdx.Gdx
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
-import warped.realms.screens.Screen
+import warped.realms.screen.Screen
 
 class WarpedRealms : KtxGame<KtxScreen>() {
 
