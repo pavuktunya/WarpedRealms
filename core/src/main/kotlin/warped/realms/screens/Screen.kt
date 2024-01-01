@@ -3,6 +3,7 @@ package warped.realms.screens
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import ktx.app.KtxScreen
@@ -14,7 +15,9 @@ import warped.realms.component.AnimationComponent
 import warped.realms.component.AnimationModel
 import warped.realms.component.AnimationType
 import warped.realms.component.ImageComponent
+import warped.realms.event.MapChangeEvent
 import warped.realms.system.AnimationSystem
+import warped.realms.system.EventSystem
 import warped.realms.system.RenderSystem
 import warped.realms.world.World
 
@@ -34,11 +37,22 @@ class Screen(game: WarpedRealms): AScreen(game) {
 
     private val animationSystem = AnimationSystem(textureAtlas, animationComponent, imageComponent)
 
+
+    private val titledMap = TmxMapLoader().load("map/map_1.tmx")
+
+    private val eventMapChange = MapChangeEvent(titledMap, renderSystem)
+
+    private val eventSystem = EventSystem(eventMapChange)
+
+
     private val world = World(renderSystem,animationSystem)
 
     override fun show() {
         super.show()
         log.debug{"Game screen shown"}
+
+        eventSystem.onTick()
+
         renderSystem.addActor(TextureRegion(textureSlime, 64,64), positionX = 14f, scale = 3f)
 
         animationComponent.nextAnimation(AnimationModel.FANTAZY_WARRIOR, AnimationType.IDLE)

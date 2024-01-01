@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="24" tileheight="24" infinite="0" nextlayerid="6" nextobjectid="1">
+ <tileset firstgid="1" name="map" tilewidth="24" tileheight="24" spacing="4" margin="2" tilecount="1296" columns="36">
+  <image source="../../assets/graphics/background/map.png" width="1024" height="1024"/>
+ </tileset>
+ <layer id="2" name="ground" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxzY2JgcBsmOIiBtmYSYz4t3DBQmIURN6alvRpA8/9jweo0tlcTaL4HEwRfRWJr0sneu0D6HhDfZ6SvvSB8bwD8C8LX8dirQiX75KC0KtB8JSxYlRHVTmrZSwpWGUC7R/EoHsW0wQDi5qsi
+  </data>
+ </layer>
+ <layer id="4" name="bgd_1" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4CBYRojAtND30gAUxmpH66j4Y0bTKVC2BRBcTG1HDUIQREWTK5/8ZkzdQSnU1hY0DItUSP+RgFty1QAWSwX+A==
+  </data>
+ </layer>
+ <layer id="5" name="fgd_1" width="30" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgxHo0FnfKMANcIXpaFjjB2UD7YARCLClyXK6u2LwAXrk1dHyYBSgAwAg4gIi
+  </data>
+ </layer>
+</map>
