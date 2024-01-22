@@ -16,6 +16,7 @@ import warped.realms.component.ImageComponent
 import warped.realms.event.Event
 import warped.realms.event.IHandleEvent
 import warped.realms.event.MapChangeEvent
+import warped.realms.screen.Screen.Companion.UNIT_SCALE
 
 class RenderSystem(
     private val stage: Stage
@@ -24,7 +25,7 @@ class RenderSystem(
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>()
     private val fgdLayers = mutableListOf<TiledMapTileLayer>()
-    private val mapRenderer = OrthogonalTiledMapRenderer(null,1/24f, stage.batch)
+    private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, stage.batch)
     private val orthoCam = stage.camera as OrthographicCamera
 
     fun addActor(

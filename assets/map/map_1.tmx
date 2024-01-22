@@ -28,9 +28,9 @@
   </data>
  </layer>
  <objectgroup id="6" name="entities">
-  <object id="1" gid="1297" x="183" y="368.333" width="162" height="162"/>
-  <object id="2" gid="1298" x="412.667" y="326" width="64" height="64"/>
-  <object id="3" gid="1298" x="170.667" y="254" width="64" height="64"/>
-  <object id="4" gid="1298" x="433.333" y="110" width="64" height="64"/>
+  <object id="1" name="player" gid="1297" x="183" y="368.333" width="162" height="162"/>
+  <object id="2" name="rat" gid="1298" x="412.667" y="326" width="64" height="64"/>
+  <object id="3" name="rat" gid="1298" x="170.667" y="254" width="64" height="64"/>
+  <object id="4" name="rat" gid="1298" x="433.333" y="110" width="64" height="64"/>
  </objectgroup>
 </map>

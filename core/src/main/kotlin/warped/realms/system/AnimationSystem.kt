@@ -12,24 +12,30 @@ import warped.realms.component.ImageComponent
 
 class AnimationSystem(
     private val textureAtlas: TextureAtlas,
-    private val animationCmp: AnimationComponent,
-    private val imageCmp: ImageComponent
+    //private val animationCmp: AnimationComponent,
+    vararg animCmps: Pair<AnimationComponent, ImageComponent>
 ):IteratingSystem() {
-    private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>()
 
+    private val animCmps: MutableMap<AnimationComponent, ImageComponent> = mutableMapOf(*animCmps)
+    private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>()
     override fun onTick(deltaTime: Float) {
         super.onTick(deltaTime)
+        animCmps.forEach { animationCmp, imageCmp ->
+            if (animationCmp.nextAnimation == NO_ANIMATION) {
+                animationCmp.stateTime += deltaTime
+            } else {
+                animationCmp.animation = animation(animationCmp.nextAnimation)
 
-        if(animationCmp.nextAnimation==NO_ANIMATION){
-            animationCmp.stateTime+=deltaTime
-        } else{
-            animationCmp.animation=animation(animationCmp.nextAnimation)
-
-            animationCmp.stateTime = 0f
-            animationCmp.nextAnimation= NO_ANIMATION
+                animationCmp.stateTime = 0f
+                animationCmp.nextAnimation = NO_ANIMATION
+            }
+            animationCmp.animation.playMode = animationCmp.playMode
+            imageCmp.image.drawable = animationCmp.animation.getKeyFrame(animationCmp.stateTime)
         }
-        animationCmp.animation.playMode = animationCmp.playMode
-        imageCmp.image.drawable =animationCmp.animation.getKeyFrame(animationCmp.stateTime)
+    }
+
+    fun addAnimationComponent(vararg _animCmps: Pair<AnimationComponent, ImageComponent>) {
+        animCmps.putAll(mutableMapOf(*_animCmps))
     }
 
     private fun animation(aniKeyPath: String): Animation<TextureRegionDrawable>{

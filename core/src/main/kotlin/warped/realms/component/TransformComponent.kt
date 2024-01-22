@@ -5,4 +5,4 @@ import ktx.math.vec2
 
 data class TransformComponent(
     var location: Vector2 = vec2()
-)
+) : Component
