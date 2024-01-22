@@ -19,7 +19,7 @@ import warped.realms.event.MapChangeEvent
 import warped.realms.screen.Screen.Companion.UNIT_SCALE
 
 class RenderSystem(
-    private val stage: Stage
+    val stage: Stage
 ): IteratingSystem(), IHandleEvent {
     private var images = mutableListOf<ImageComponent>()
 

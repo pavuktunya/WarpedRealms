@@ -1,5 +1,7 @@
 package warped.realms.world
 
+import warped.realms.system.EachFrame
+import warped.realms.system.Fixed
 import warped.realms.system.IteratingSystem
 
 class World(

@@ -1,10 +1,10 @@
-package warped.realms.system
+package warped.realms.server.system
 
 import warped.realms.world.IDispose
 
-open class IteratingSystem(val interval: Interval = EachFrame()) : IDispose {
+open class ServerIteratingSystem(val interval: Interval = EachFrame()) : IDispose {
     var accumulator: Float = 0f
-    open fun onTick(deltaTime: Float){
+    open fun onTick(deltaTime: Float) {
         when (interval) {
             is Fixed -> {
                 accumulator += deltaTime
@@ -20,6 +20,7 @@ open class IteratingSystem(val interval: Interval = EachFrame()) : IDispose {
 
     open fun onUpdate(deltaTime: Float) {
     }
+
     override fun dispose() {
     }
 }

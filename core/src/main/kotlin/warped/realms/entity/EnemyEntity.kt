@@ -2,13 +2,15 @@ package warped.realms.entity
 
 import warped.realms.component.AnimationComponent
 import warped.realms.component.ImageComponent
+import warped.realms.component.PhysicComponent
 import warped.realms.component.TransformComponent
-import warped.realms.world.IDispose
 
 class EnemyEntity(
-    imageComponent: ImageComponent,
-    transformComponent: TransformComponent,
-    animationComponent: AnimationComponent,
+    physicComponent: PhysicComponent,
+    entity: Entity,
+    imageComponent: ImageComponent = entity.entityComponent.imageComponent,
+    transformComponent: TransformComponent = entity.entityComponent.transformComponent,
+    animationComponent: AnimationComponent = entity.entityComponent.animationComponent
 ): Entity(
     imageComponent,
     transformComponent,

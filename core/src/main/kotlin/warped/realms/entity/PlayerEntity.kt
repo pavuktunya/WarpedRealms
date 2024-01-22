@@ -1,16 +1,14 @@
 package warped.realms.entity
 
-import ktx.math.vec2
-import warped.realms.component.AnimationComponent
-import warped.realms.component.ImageComponent
-import warped.realms.component.LivingComponent
-import warped.realms.component.TransformComponent
+import warped.realms.component.*
 import warped.realms.world.*
 
 class PlayerEntity(
-    imageComponent: ImageComponent,
-    transformComponent: TransformComponent,
-    animationComponent: AnimationComponent,
+    physicComponent: PhysicComponent,
+    entity: Entity,
+    imageComponent: ImageComponent = entity.entityComponent.imageComponent,
+    transformComponent: TransformComponent = entity.entityComponent.transformComponent,
+    animationComponent: AnimationComponent = entity.entityComponent.animationComponent
 ): Entity(
     imageComponent,
     transformComponent,

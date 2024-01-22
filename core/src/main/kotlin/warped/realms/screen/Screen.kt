@@ -8,22 +8,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
+import ktx.box2d.createWorld
 import ktx.log.logger
+import ktx.math.vec2
 import warped.realms.WarpedRealms
 import warped.realms.component.AnimationComponent
 import warped.realms.component.AnimationModel
 import warped.realms.component.AnimationType
 import warped.realms.component.ImageComponent
 import warped.realms.event.MapChangeEvent
-import warped.realms.system.AnimationSystem
-import warped.realms.system.EventSystem
-import warped.realms.system.RenderSystem
-import warped.realms.system.SpawnSystem
+import warped.realms.system.*
 import warped.realms.world.System
 import warped.realms.world.World
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    private val system: System = System()
+    private val phWorld = createWorld(gravity = vec2()).apply {
+        setAutoClearForces(false)
+    }
+    private val system: System = System(phWorld)
     private val world = World(*system.getIteratingSystem())
 
     override fun show() {
@@ -33,7 +35,7 @@ class Screen(game: WarpedRealms): AScreen(game) {
     }
     override fun render(delta: Float) {
         super.render(delta)
-        world.onTick(delta)
+        world.onTick(delta.coerceAtMost(0.25f))
     }
 
     override fun resize(width: Int, height: Int) {
@@ -45,6 +47,7 @@ class Screen(game: WarpedRealms): AScreen(game) {
         super.dispose()
         system.dispose()
         world.dispose()
+        phWorld.disposeSafely()
     }
 
     companion object{
