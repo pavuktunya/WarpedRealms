@@ -17,6 +17,7 @@ import warped.realms.component.AnimationModel
 import warped.realms.component.AnimationType
 import warped.realms.component.ImageComponent
 import warped.realms.event.MapChangeEvent
+import warped.realms.input.PlayerKeyboardInputProcessor
 import warped.realms.system.*
 import warped.realms.world.System
 import warped.realms.world.World
@@ -25,7 +26,9 @@ class Screen(game: WarpedRealms): AScreen(game) {
     private val phWorld = createWorld(gravity = vec2()).apply {
         setAutoClearForces(false)
     }
-    private val system: System = System(phWorld)
+    private val inputProcessor: PlayerKeyboardInputProcessor = PlayerKeyboardInputProcessor()
+
+    private val system: System = System(phWorld, inputProcessor)
     private val world = World(*system.getIteratingSystem())
 
     override fun show() {

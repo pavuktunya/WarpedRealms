@@ -76,8 +76,13 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
     private fun spawn(entity: Entity) {
         system.animationSystem.addAnimationComponent(entity.entityComponent.animationComponent to entity.entityComponent.imageComponent)
     }
-    private fun move(physicComponent: PhysicComponent, imageComponent: ImageComponent) {
+    private fun phys(physicComponent: PhysicComponent, imageComponent: ImageComponent) {
         system.physicSystem.addPhysicComponent(physicComponent to imageComponent)
+    }
+
+    private fun move(moveComponent: MoveComponent, physicComponent: PhysicComponent) {
+        system.inputProcessor.addMoveCmp(moveComponent)
+        system.moveSystem.addMoveComponent(moveComponent to physicComponent)
     }
 
     private fun createPlayerEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): PlayerEntity {
@@ -92,9 +97,9 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
             }
         }.also {
             it.onAdded(entity)
-            move(it, entity.entityComponent.imageComponent)
+            phys(it, entity.entityComponent.imageComponent)
         }, entity
-        )
+        ).also { move(it.moveComponent, it.physicComponent) }
     }
 
     private fun createEnemyEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): EnemyEntity {
@@ -112,7 +117,7 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
             }
         }.also {
             it.onAdded(entity)
-            move(it, entity.entityComponent.imageComponent)
+            phys(it, entity.entityComponent.imageComponent)
         }, entity
         )
     }

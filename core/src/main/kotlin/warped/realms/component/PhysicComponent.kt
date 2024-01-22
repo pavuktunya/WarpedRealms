@@ -10,6 +10,7 @@ import ktx.math.vec2
 import warped.realms.entity.Entity
 
 class PhysicComponent() {
+    val impulse = vec2()
     lateinit var body: Body
     fun onAdded(entity: Entity, component: PhysicComponent = this) {
         component.body.userData = entity

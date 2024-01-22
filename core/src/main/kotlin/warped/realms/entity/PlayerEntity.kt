@@ -4,8 +4,9 @@ import warped.realms.component.*
 import warped.realms.world.*
 
 class PlayerEntity(
-    physicComponent: PhysicComponent,
+    val physicComponent: PhysicComponent,
     entity: Entity,
+    val moveComponent: MoveComponent = MoveComponent(),
     imageComponent: ImageComponent = entity.entityComponent.imageComponent,
     transformComponent: TransformComponent = entity.entityComponent.transformComponent,
     animationComponent: AnimationComponent = entity.entityComponent.animationComponent

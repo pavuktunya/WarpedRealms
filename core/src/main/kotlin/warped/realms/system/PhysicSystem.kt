@@ -16,6 +16,12 @@ class PhysicSystem(
     fun addPhysicComponent(vararg _physCmps: Pair<PhysicComponent, ImageComponent>) {
         physCmps.putAll(mutableMapOf(*_physCmps).also {
             it.forEach { physicCmp, imageCmp ->
+
+                if (!physicCmp.impulse.isZero) {
+                    physicCmp.body.applyLinearImpulse(physicCmp.impulse, physicCmp.body.worldCenter, true)
+                    physicCmp.impulse.setZero()
+                }
+
                 val vect = physicCmp.body.position
                 imageCmp.image.run {
                     setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
@@ -36,6 +42,18 @@ class PhysicSystem(
     override fun onUpdate(deltaTime: Float) {
         super.onUpdate(deltaTime)
         phWorld.step(deltaTime, 6, 2)
+        physCmps.forEach { physicCmp, imageCmp ->
+
+            if (!physicCmp.impulse.isZero) {
+                physicCmp.body.applyLinearImpulse(physicCmp.impulse, physicCmp.body.worldCenter, true)
+                physicCmp.impulse.setZero()
+            }
+
+            val vect = physicCmp.body.position
+            imageCmp.image.run {
+                setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
+            }
+        }
     }
 
     override fun dispose() {

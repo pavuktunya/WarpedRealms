@@ -8,14 +8,16 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport
 import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 import warped.realms.event.MapChangeEvent
+import warped.realms.input.PlayerKeyboardInputProcessor
 import warped.realms.system.*
 
-class System(val phWorld: World) {
+class System(val phWorld: World, val inputProcessor: PlayerKeyboardInputProcessor) {
     private val textureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
     val physicSystem = PhysicSystem(phWorld)
     val renderSystem = RenderSystem(
         Stage(ExtendViewport(16f, 9f, 1920f, 1080f))
     )
+    val moveSystem = MoveSystem()
     private val debugSystem: DebugSystem = DebugSystem(phWorld, renderSystem.stage)
     val animationSystem = AnimationSystem(textureAtlas)
     private val spawnSystem = SpawnSystem(this, textureAtlas, phWorld)
@@ -25,6 +27,7 @@ class System(val phWorld: World) {
     private val eventSystem = EventSystem(eventMapChange)
 
     fun getIteratingSystem(): Array<IteratingSystem> = arrayOf(
+        moveSystem,
         physicSystem,
         renderSystem,
         animationSystem,
