@@ -12,6 +12,7 @@ import ktx.math.vec2
 import warped.realms.component.*
 import warped.realms.entity.EnemyEntity
 import warped.realms.entity.Entity
+import warped.realms.entity.LiveEntity
 import warped.realms.entity.PlayerEntity
 import warped.realms.event.Event
 import warped.realms.event.IHandleEvent
@@ -81,44 +82,43 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
     }
 
     private fun move(moveComponent: MoveComponent, physicComponent: PhysicComponent) {
-        system.inputProcessor.addMoveCmp(moveComponent)
         system.moveSystem.addMoveComponent(moveComponent to physicComponent)
+    }
+    private fun input(moveComponent: MoveComponent) {
+        system.inputProcessor.addMoveCmp(moveComponent)
     }
 
     private fun createPlayerEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): PlayerEntity {
-        val entity = createEntity(name, cordX, cordY, size)
-        return PlayerEntity(PhysicComponent.physicCmpFromImage(
-            phWorld,
-            entity.entityComponent.imageComponent.image,
-            BodyDef.BodyType.DynamicBody
-        ) { phCmp, width, height ->
-            box(width, height) {
-                isSensor = false
-            }
-        }.also {
-            it.onAdded(entity)
-            phys(it, entity.entityComponent.imageComponent)
-        }, entity
-        ).also { move(it.moveComponent, it.physicComponent) }
+        return PlayerEntity(createLiveEntity(name, cordX, cordY, size).also {
+            it.moveComponent.speed = 5f
+            move(it.moveComponent, it.physicComponent)
+            input(it.moveComponent)
+        })
     }
 
     private fun createEnemyEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): EnemyEntity {
-        val entity = createEntity(name, cordX, cordY, size)
+        return EnemyEntity(createLiveEntity(name, cordX, cordY, size).also {
+            it.moveComponent.speed = 8f
+            move(it.moveComponent, it.physicComponent)
+        })
+    }
 
-        return EnemyEntity(PhysicComponent.physicCmpFromImage(
+    private fun createLiveEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): LiveEntity {
+        val entity = createEntity(name, cordX, cordY, size)
+        return LiveEntity(
+            MoveComponent(1f),
+            PhysicComponent.physicCmpFromImage(
             phWorld,
             entity.entityComponent.imageComponent.image,
             BodyDef.BodyType.DynamicBody
         ) { phCmp, width, height ->
             box(width, height) {
                 isSensor = false
-                //userData = "INTERACTION_SENSOR"
-                //friction
             }
         }.also {
             it.onAdded(entity)
             phys(it, entity.entityComponent.imageComponent)
-        }, entity
+            }, entity.entityComponent
         )
     }
 
