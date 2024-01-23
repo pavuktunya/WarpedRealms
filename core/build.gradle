@@ -14,6 +14,7 @@ dependencies {
   api "io.github.libktx:ktx-collections:$ktxVersion"
   api "io.github.libktx:ktx-scene2d:$ktxVersion"
   api "io.github.libktx:ktx-log:$ktxVersion"
+  api "io.github.libktx:ktx-tiled:$ktxVersion"
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
   api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
 }

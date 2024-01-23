@@ -1,7 +1,11 @@
 package warped.realms.system
 
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.World
+import ktx.log.debug
 import ktx.log.logger
+import ktx.math.component1
+import ktx.math.component2
 import warped.realms.component.AnimationComponent
 import warped.realms.component.ImageComponent
 import warped.realms.component.PhysicComponent
@@ -39,19 +43,31 @@ class PhysicSystem(
         phWorld.clearForces()
     }
 
+    //Чтобы нагнать разницу в рендере и физики, вызывается несколько раз подряд
     override fun onUpdate(deltaTime: Float) {
         super.onUpdate(deltaTime)
         phWorld.step(deltaTime, 6, 2)
         physCmps.forEach { physicCmp, imageCmp ->
+            physicCmp.prevPos.set(physicCmp.body.position)
 
             if (!physicCmp.impulse.isZero) {
                 physicCmp.body.applyLinearImpulse(physicCmp.impulse, physicCmp.body.worldCenter, true)
                 physicCmp.impulse.setZero()
             }
+        }
+    }
 
-            val vect = physicCmp.body.position
+    override fun onAlpha(alpha: Float) {
+        physCmps.forEach { physicCmp, imageCmp ->
+
+            val (prevX, prevY) = physicCmp.prevPos
+            val (bodyX, bodyY) = physicCmp.body.position
+
             imageCmp.image.run {
-                setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
+                setPosition(
+                    MathUtils.lerp(prevX, bodyX, alpha) - width * 0.5f,
+                    MathUtils.lerp(prevY, bodyY, alpha) - height * 0.5f
+                )
             }
         }
     }

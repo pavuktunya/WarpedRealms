@@ -23,12 +23,15 @@ class System(val phWorld: World, val inputProcessor: PlayerKeyboardInputProcesso
     private val spawnSystem = SpawnSystem(this, textureAtlas, phWorld)
     private val titledMap = TmxMapLoader().load("map/map_1.tmx")
 
-    private val eventMapChange = MapChangeEvent(titledMap, renderSystem, spawnSystem)
+    val cameraSystem = CameraSystem(renderSystem.stage.camera)
+
+    private val eventMapChange = MapChangeEvent(titledMap, renderSystem, spawnSystem, cameraSystem)
     private val eventSystem = EventSystem(eventMapChange)
 
     fun getIteratingSystem(): Array<IteratingSystem> = arrayOf(
         moveSystem,
         physicSystem,
+        cameraSystem,
         renderSystem,
         animationSystem,
         debugSystem

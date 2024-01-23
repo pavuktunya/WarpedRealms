@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.Scaling
 import ktx.assets.disposeSafely
 import ktx.graphics.use
+import ktx.log.debug
 import ktx.log.logger
 import warped.realms.component.ImageComponent
 import warped.realms.event.Event

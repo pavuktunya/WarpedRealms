@@ -13,13 +13,14 @@ open class IteratingSystem(val interval: Interval = EachFrame()) : IDispose {
                     onUpdate(deltaTime)
                     accumulator -= stepRate
                 }
-                //onAlpha(accumulator/ stepRate)
+                onAlpha(accumulator / stepRate)
             }
         }
     }
 
     open fun onUpdate(deltaTime: Float) {
     }
+    open fun onAlpha(alpha: Float) {}
     override fun dispose() {
     }
 }

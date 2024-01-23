@@ -9,6 +9,9 @@ import ktx.app.gdxError
 import ktx.box2d.box
 import ktx.log.logger
 import ktx.math.vec2
+import ktx.tiled.type
+import ktx.tiled.x
+import ktx.tiled.y
 import warped.realms.component.*
 import warped.realms.entity.EnemyEntity
 import warped.realms.entity.Entity
@@ -53,8 +56,8 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
                         layer.objects.forEach { obj ->
                             spawnCfg(
                                 obj.name,
-                                obj.properties.get("x").toString().toFloat() * UNIT_SCALE,
-                                obj.properties.get("y").toString().toFloat() * UNIT_SCALE
+                                obj.x * UNIT_SCALE,
+                                obj.y * UNIT_SCALE
                             )
                         }
                         return true;
@@ -84,15 +87,16 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
     private fun move(moveComponent: MoveComponent, physicComponent: PhysicComponent) {
         system.moveSystem.addMoveComponent(moveComponent to physicComponent)
     }
-    private fun input(moveComponent: MoveComponent) {
+    private fun input(moveComponent: MoveComponent, imageComponent: ImageComponent) {
         system.inputProcessor.addMoveCmp(moveComponent)
+        system.cameraSystem.addTrecker(imageComponent)
     }
 
     private fun createPlayerEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): PlayerEntity {
         return PlayerEntity(createLiveEntity(name, cordX, cordY, size).also {
             it.moveComponent.speed = 5f
             move(it.moveComponent, it.physicComponent)
-            input(it.moveComponent)
+            input(it.moveComponent, it.entityComponent.imageComponent)
         })
     }
 
