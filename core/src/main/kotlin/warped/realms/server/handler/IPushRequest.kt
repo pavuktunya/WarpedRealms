@@ -1,4 +1,4 @@
-package warped.realms.server
+package warped.realms.server.handler
 
 interface IPushRequest {
     fun sendData(data: Int)
