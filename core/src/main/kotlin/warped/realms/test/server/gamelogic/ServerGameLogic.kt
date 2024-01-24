@@ -9,7 +9,6 @@ class ServerGameLogic {
         setAutoClearForces(false)
     }
     fun onTick(delta: Float) {
-
     }
     fun dispose() {
         phWorld.disposeSafely()

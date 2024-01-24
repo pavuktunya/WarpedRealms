@@ -1,18 +1,17 @@
 package warped.realms.test.server
 
 import kotlinx.coroutines.Runnable
+import warped.realms.test.queue.ServerQueue
 import warped.realms.test.server.gamelogic.ServerGameLogic
+import warped.realms.test.server.request.ClientRequest
 import warped.realms.world.IDispose
 import java.lang.Thread.sleep
 import java.util.concurrent.Executors
 import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 
-class TestServer : IDispose {
+class TestServer(serverQueue: ServerQueue, clientQueue: ServerQueue) : IDispose {
     private val t0: Thread
     private val t1: Thread
-    private val t2: Thread
     private var flag = true
 
     init {
@@ -22,49 +21,28 @@ class TestServer : IDispose {
             val fixedTime: Int = 1000 * 1 / 60
             var deltaTime: Int = 1000 * 1 / 10
 
-            while (!flag) {
+            while (flag) {
                 serverGameLogic.onTick((deltaTime / fixedTime).toFloat())
-                sleep((fixedTime - deltaTime).toLong())
+                sleep(1200)
             }
             serverGameLogic.dispose()
         }
 
         t1 = Thread {
-            while (flag) {
-                println("-- Server: Get Coord")
-                sleep(200)
-            }
-        }
-
-        t2 = Thread {
-            while (flag) {
-                println("-- Server: Push Coord")
-                sleep(1000)
-            }
+            val clientRequest = ClientRequest(serverQueue, clientQueue)
         }
 
         t0.start()
         t1.start()
-        t2.start()
     }
 
     override fun dispose() {
         flag = false
-        t0.join(50)
-        t1.join(100)
-        t2.join()
+        t1.join()
+        t0.join()
     }
 }
 
-class Example {
-    init {
-        val list = mutableListOf<Int>()
-
-        val lock = ReentrantReadWriteLock()
-        val writeLock = lock.writeLock()
-
-    }
-}
 
 fun MutableList<Int>.safeAdd(lock: Lock) {
     lock.lock()
@@ -113,45 +91,3 @@ class Counter {
     }
 }
 
-class Lock {
-    val lock = ReentrantLock()
-
-    init {
-        lock.lock()
-        try {
-            println("Only one thread can enter this block")
-            println(lock.isLocked)
-        } finally {
-            lock.unlock()
-        }
-    }
-}
-
-class SafeStack {
-    val stack = mutableListOf<Int>()
-    val capacity = 5
-
-    val lock = ReentrantLock()
-    val stackEmptyCondition = lock.newCondition()
-    val stackFullCondition = lock.newCondition()
-
-    fun push(num: Int) {
-        lock.lock()
-        while (stack.size == capacity) {
-            stackFullCondition.await()
-        }
-        stack.add(num)
-        stackEmptyCondition.signalAll()
-        lock.unlock()
-    }
-
-    fun pop() {
-        lock.lock()
-        while (stack.size == 0) {
-            stackEmptyCondition.await()
-        }
-        stack.removeLast()
-        stackFullCondition.signalAll()
-        lock.unlock()
-    }
-}

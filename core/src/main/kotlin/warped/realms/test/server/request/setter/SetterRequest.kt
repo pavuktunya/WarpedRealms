@@ -1,12 +1,12 @@
 package warped.realms.test.server.request.setter
 
-import warped.realms.server.request.getter.IGetRequest
+import warped.realms.test.queue.ServerQueue
 
 class SetterRequest(
-    getRequest: IGetRequest
+    val queue: ServerQueue
 ) : ISetRequest {
-    override val getRequest: IGetRequest = getRequest
-    override fun sendData(data: Int, getRequest: IGetRequest) {
-        println("send $data")
+    override fun sendData(data: Int) {
+        queue.push(data)
+        println("[CLIENT] Send $data + ${java.time.LocalTime.now()}")
     }
 }

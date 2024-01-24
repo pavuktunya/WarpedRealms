@@ -1,13 +1,13 @@
 package warped.realms.server.request.getter
 
-import warped.realms.server.request.setter.ISetRequest
+import warped.realms.test.queue.ServerQueue
 
 class GetterRequest(
-    setRequest: ISetRequest
+    val queue: ServerQueue
 ) : IGetRequest {
-    override val setRequest: ISetRequest = setRequest
-    override fun getData(pushRequest: ISetRequest): Int {
-        println("data get")
-        return 10
+    override fun getData(): Int {
+        var data = queue.pop()
+        println("[CLIENT] Get $data + ${java.time.LocalTime.now()}")
+        return data
     }
 }
