@@ -7,12 +7,14 @@ import ktx.log.logger
 import ktx.math.vec2
 import warped.realms.WarpedRealms
 import warped.realms.input.PlayerKeyboardInputProcessor
+import warped.realms.server.Server
 import warped.realms.test.server.TestServer
 import warped.realms.world.System
 import warped.realms.world.World
 
 class Screen(game: WarpedRealms): AScreen(game) {
     private val server = TestServer()
+    private val serverHandler = Server()
 
     private val phWorld = createWorld(gravity = vec2()).apply {
         setAutoClearForces(false)
@@ -40,6 +42,8 @@ class Screen(game: WarpedRealms): AScreen(game) {
     override fun dispose() {
         super.dispose()
         server.dispose()
+        serverHandler.dispose()
+
         system.dispose()
         world.dispose()
         phWorld.disposeSafely()

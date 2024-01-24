@@ -1,4 +1,6 @@
-package warped.realms.server.request
+package warped.realms.server.request.getter
+
+import warped.realms.server.request.setter.ISetRequest
 
 interface IGetRequest {
     val setRequest: ISetRequest

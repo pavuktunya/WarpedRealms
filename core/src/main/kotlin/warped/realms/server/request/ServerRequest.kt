@@ -1,10 +1,10 @@
-package warped.realms.server
+package warped.realms.server.request
 
 import ktx.log.logger
-import warped.realms.server.request.GetterRequest
-import warped.realms.server.request.IGetRequest
-import warped.realms.server.request.ISetRequest
-import warped.realms.server.request.SetterRequest
+import warped.realms.server.request.getter.GetterRequest
+import warped.realms.server.request.getter.IGetRequest
+import warped.realms.server.request.setter.ISetRequest
+import warped.realms.server.request.setter.SetterRequest
 
 class ServerRequest(
     set_subscriber: IGetRequest,
