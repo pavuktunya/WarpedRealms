@@ -9,7 +9,9 @@ import ktx.assets.disposeSafely
 import ktx.assets.toInternalFile
 import warped.realms.event.MapChangeEvent
 import warped.realms.input.PlayerKeyboardInputProcessor
+import warped.realms.server.ServerRequest
 import warped.realms.system.*
+import warped.realms.test.server.TestServer
 
 class System(val phWorld: World, val inputProcessor: PlayerKeyboardInputProcessor) {
     private val textureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
@@ -28,6 +30,8 @@ class System(val phWorld: World, val inputProcessor: PlayerKeyboardInputProcesso
     private val eventMapChange = MapChangeEvent(titledMap, renderSystem, spawnSystem, cameraSystem)
     private val eventSystem = EventSystem(eventMapChange)
 
+    private val serverRequest = ServerRequest()
+
     fun getIteratingSystem(): Array<IteratingSystem> = arrayOf(
         moveSystem,
         physicSystem,
@@ -45,6 +49,7 @@ class System(val phWorld: World, val inputProcessor: PlayerKeyboardInputProcesso
     }
 
     fun dispose() {
+        serverRequest.dispose()
         textureAtlas.disposeSafely()
         titledMap.disposeSafely()
     }

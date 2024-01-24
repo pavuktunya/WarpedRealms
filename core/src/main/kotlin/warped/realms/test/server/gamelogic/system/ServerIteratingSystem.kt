@@ -1,4 +1,4 @@
-package warped.realms.server.system
+package warped.realms.test.server.gamelogic.system
 
 import warped.realms.world.IDispose
 

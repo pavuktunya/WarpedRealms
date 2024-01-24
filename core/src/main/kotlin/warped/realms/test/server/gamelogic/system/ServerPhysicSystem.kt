@@ -1,9 +1,9 @@
-package warped.realms.server.system
+package warped.realms.test.server.gamelogic.system
 
 import com.badlogic.gdx.physics.box2d.World
 import ktx.log.logger
 import warped.realms.component.ImageComponent
-import warped.realms.server.component.ServerPhysicComponent
+import warped.realms.test.server.gamelogic.component.ServerPhysicComponent
 
 class ServerPhysicSystem(
     private val phWorld: World,

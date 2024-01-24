@@ -9,6 +9,11 @@ open class IteratingSystem(val interval: Interval = EachFrame()) : IDispose {
             is Fixed -> {
                 accumulator += deltaTime
                 val stepRate = interval.step
+
+                if (accumulator < stepRate) {
+                    return
+                }
+
                 while (accumulator >= stepRate) {
                     onUpdate(deltaTime)
                     accumulator -= stepRate

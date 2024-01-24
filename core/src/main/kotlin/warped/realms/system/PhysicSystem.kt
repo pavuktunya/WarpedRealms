@@ -56,7 +56,6 @@ class PhysicSystem(
             }
         }
     }
-
     override fun onAlpha(alpha: Float) {
         physCmps.forEach { physicCmp, imageCmp ->
 
@@ -71,7 +70,6 @@ class PhysicSystem(
             }
         }
     }
-
     override fun dispose() {
         super.dispose()
     }

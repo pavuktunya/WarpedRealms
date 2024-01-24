@@ -1,10 +1,10 @@
-package warped.realms.server
+package warped.realms.test.server.gamelogic
 
 import ktx.assets.disposeSafely
 import ktx.box2d.createWorld
 import ktx.math.vec2
 
-class Server {
+class ServerGameLogic {
     private val phWorld = createWorld(gravity = vec2()).apply {
         setAutoClearForces(false)
     }

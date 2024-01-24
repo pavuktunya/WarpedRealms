@@ -1,4 +1,4 @@
-package warped.realms.server.component
+package warped.realms.test.server.gamelogic.component
 
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
