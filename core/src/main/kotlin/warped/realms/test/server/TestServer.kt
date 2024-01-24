@@ -1,6 +1,7 @@
 package warped.realms.test.server
 
 import kotlinx.coroutines.Runnable
+import warped.realms.test.server.gamelogic.ServerGameLogic
 import warped.realms.world.IDispose
 import java.lang.Thread.sleep
 import java.util.concurrent.Executors
@@ -16,25 +17,32 @@ class TestServer : IDispose {
 
     init {
         t0 = Thread {
-            //val serverGameLogicSystem = GameLogicSystem()
-            while (flag) {
-                println("== Server: Game Logic")
-                sleep(200)
+            val serverGameLogic = ServerGameLogic()
+
+            val fixedTime: Int = 1000 * 1 / 60
+            var deltaTime: Int = 1000 * 1 / 10
+
+            while (!flag) {
+                serverGameLogic.onTick((deltaTime / fixedTime).toFloat())
+                sleep((fixedTime - deltaTime).toLong())
             }
-            //serverGameLogicSystem.dispose()
+            serverGameLogic.dispose()
         }
+
         t1 = Thread {
             while (flag) {
                 println("-- Server: Get Coord")
                 sleep(200)
             }
         }
+
         t2 = Thread {
             while (flag) {
                 println("-- Server: Push Coord")
                 sleep(1000)
             }
         }
+
         t0.start()
         t1.start()
         t2.start()
@@ -42,9 +50,9 @@ class TestServer : IDispose {
 
     override fun dispose() {
         flag = false
-        t2.join()
         t0.join(50)
         t1.join(100)
+        t2.join()
     }
 }
 

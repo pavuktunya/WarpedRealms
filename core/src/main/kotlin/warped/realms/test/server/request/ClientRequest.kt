@@ -1,4 +1,4 @@
-package warped.realms.server.request
+package warped.realms.test.server.request
 
 import ktx.log.logger
 import warped.realms.server.request.getter.GetterRequest
@@ -6,7 +6,7 @@ import warped.realms.server.request.getter.IGetRequest
 import warped.realms.server.request.setter.ISetRequest
 import warped.realms.server.request.setter.SetterRequest
 
-class ServerRequest(
+class ClientRequest(
     set_subscriber: IGetRequest,
     get_subscriber: ISetRequest
 ) {
@@ -28,27 +28,17 @@ class ServerRequest(
             Thread.sleep(100)
         }
     }
-    val t2 = Thread {
-        var data: Int = 0
-        while (flag) {
-            setterRequest.sendData(data, setterRequest.getRequest)
-            println("++ Client: Push Coord")
-            Thread.sleep(1200)
-        }
-    }
 
     init {
         t1.start()
-        t2.start()
     }
 
     fun dispose() {
         flag = false
         t1.join()
-        t2.join()
     }
 
     companion object {
-        val log = logger<ServerRequest>()
+        val log = logger<ClientRequest>()
     }
 }
