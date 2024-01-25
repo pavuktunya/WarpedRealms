@@ -9,7 +9,7 @@ class ServerQueue() {
     val lock: ReentrantLock = ReentrantLock()
 
     val queue = mutableListOf<Int>()
-    val capacity = 10
+    val capacity = 2
 
     val stackEmptyCondition = lock.newCondition()
     val stackFullCondition = lock.newCondition()
@@ -17,11 +17,13 @@ class ServerQueue() {
     fun push(num: Int) {
         lock.lock()
         try {
-            while (queue.size == capacity) {
+            if (queue.size == capacity) {
                 stackFullCondition.await()
             }
-            queue.add(num)
-            stackEmptyCondition.signalAll()
+            if (queue.size != capacity) {
+                queue.add(num)
+                stackEmptyCondition.signalAll()
+            }
         } finally {
             lock.unlock()
         }
@@ -29,19 +31,20 @@ class ServerQueue() {
 
     fun pop(): Int {
         lock.lock()
+        var t = 0
         try {
-            while (queue.size == 0) {
+            if (queue.size == 0) {
                 stackEmptyCondition.await()
             }
-            val t = queue.last()
-            queue.removeLast()
+            if (queue.size != 0) {
+                t = queue.last()
+                queue.removeLast()
 
-            stackFullCondition.signalAll()
-            lock.unlock()
-            return t
+                stackFullCondition.signalAll()
+            }
         } finally {
             lock.unlock()
-            return 0
         }
+        return t
     }
 }

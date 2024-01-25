@@ -6,27 +6,29 @@ import warped.realms.test.server.request.getter.GetterRequest
 import warped.realms.test.server.request.getter.IGetRequest
 import warped.realms.test.server.request.setter.ISetRequest
 import warped.realms.test.server.request.setter.SetterRequest
+import java.util.concurrent.locks.ReentrantLock
 
-class ClientRequest(serverQueue: ServerQueue, clientQueue: ServerQueue) {
+class ClientRequest(serverQueue: ServerQueue, clientQueue: ServerQueue, val lock: ReentrantLock) {
     private val setterRequest: ISetRequest = SetterRequest(serverQueue)
     private val getterRequest: IGetRequest = GetterRequest(clientQueue)
 
-    var flag = true
 
     val t1 = Thread {
-        var data: Int = 10
-        while (flag) {
+        var data: Int = 0
+        while (lock.isLocked) {
             println("[SERVER]-Try Get $data + ${java.time.LocalTime.now()}")
             data = getterRequest.getData()
-            Thread.sleep(1200)
+            data++
+            Thread.sleep(1000)
         }
     }
     val t2 = Thread {
-        var data: Int = 10
-        while (flag) {
+        var data: Int = 100
+        while (lock.isLocked) {
+            data++
             println("[SERVER]-Try Send $data + ${java.time.LocalTime.now()}")
             setterRequest.sendData(data)
-            Thread.sleep(1200)
+            Thread.sleep(1000)
         }
     }
 
@@ -35,13 +37,8 @@ class ClientRequest(serverQueue: ServerQueue, clientQueue: ServerQueue) {
         t2.start()
     }
 
-
     fun dispose() {
-        flag = false
         t1.join()
-    }
-
-    companion object {
-        val log = logger<ClientRequest>()
+        t2.join()
     }
 }

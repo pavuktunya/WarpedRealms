@@ -6,8 +6,8 @@ class GetterRequest(
     val queue: ServerQueue
 ) : IGetRequest {
     override fun getData(): Int {
-        val data = queue.pop()
-        println("[CLIENT] Get $data + ${java.time.LocalTime.now()}")
-        return data
+        val d = queue.pop()
+        println("[CLIENT] Get $d + ${java.time.LocalTime.now()}")
+        return d
     }
 }

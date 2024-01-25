@@ -13,21 +13,23 @@ class ServerRequest() {
     val clientQueue: ServerQueue = ServerQueue()
 
     private val setterRequest: ISetRequest = SetterRequest(clientQueue)
-    private val getterRequest: IGetRequest = GetterRequest(serverQueue)
+    private val getterRequest: IGetRequest = GetterRequest(clientQueue)
 
-    var flag = true
+    val lock = ReentrantLock()
 
-    val t1 = Thread {
-        var data: Int = 0
-        while (flag) {
-            println("[CLIENT]-Try Get $data + ${java.time.LocalTime.now()}")
-            data = getterRequest.getData()
+    val got = Thread {
+        var cord: Int = 0
+        while (lock.isLocked) {
+            println("[CLIENT]-Try Get $cord + ${java.time.LocalTime.now()}")
+            cord = getterRequest.getData()
+            cord++
             Thread.sleep(1200)
         }
     }
-    val t2 = Thread {
-        var data: Int = 5
-        while (flag) {
+    val send = Thread {
+        var data: Int = 110
+        while (lock.isLocked) {
+            data++
             println("[CLIENT]-Try Send $data + ${java.time.LocalTime.now()}")
             setterRequest.sendData(data)
             Thread.sleep(1200)
@@ -35,14 +37,29 @@ class ServerRequest() {
     }
 
     init {
-        t1.start()
-        t2.start()
+        lock.lock()
+
+        got.start()
+        send.start()
     }
 
     fun dispose() {
-        flag = false
-        t1.join()
-        t2.join()
+        lock.unlock()
+
+        got.join(5)
+        send.join(5)
+
+        if (got.isAlive) {
+            clientQueue.stackEmptyCondition.signalAll()
+            serverQueue.stackEmptyCondition.signalAll()
+        }
+        if (send.isAlive) {
+            clientQueue.stackFullCondition.signalAll()
+            serverQueue.stackFullCondition.signalAll()
+        }
+
+        got.join()
+        send.join()
     }
 
     companion object {
