@@ -13,7 +13,7 @@ class ServerRequest() {
     val clientQueue: ServerQueue = ServerQueue()
 
     private val setterRequest: ISetRequest = SetterRequest(clientQueue)
-    private val getterRequest: IGetRequest = GetterRequest(clientQueue)
+    private val getterRequest: IGetRequest = GetterRequest(serverQueue)
 
     val lock = ReentrantLock()
 
@@ -45,20 +45,9 @@ class ServerRequest() {
 
     fun dispose() {
         lock.unlock()
-
-        got.join(5)
-        send.join(5)
-
-        if (got.isAlive) {
-            clientQueue.stackEmptyCondition.signalAll()
-            serverQueue.stackEmptyCondition.signalAll()
-        }
-        if (send.isAlive) {
-            clientQueue.stackFullCondition.signalAll()
-            serverQueue.stackFullCondition.signalAll()
-        }
-
+        serverQueue.stackEmptyCondition.signalAll()
         got.join()
+        clientQueue.stackFullCondition.signalAll()
         send.join()
     }
 

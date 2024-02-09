@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 
 class ServerQueue() {
     //val lock = ReentrantReadWriteLock()
-//val writeLock = lock.writeLock()
+    //val writeLock = lock.writeLock()
     val lock: ReentrantLock = ReentrantLock()
 
     val queue = mutableListOf<Int>()

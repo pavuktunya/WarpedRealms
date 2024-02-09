@@ -15,7 +15,6 @@ class AnimationSystem(
     //private val animationCmp: AnimationComponent,
     vararg animCmps: Pair<AnimationComponent, ImageComponent>
 ):IteratingSystem() {
-
     private val animCmps: MutableMap<AnimationComponent, ImageComponent> = mutableMapOf(*animCmps)
     private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>()
     override fun onTick(deltaTime: Float) {
