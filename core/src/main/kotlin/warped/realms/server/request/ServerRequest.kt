@@ -1,5 +1,12 @@
 package warped.realms.server.request
 
+import io.ktor.client.*
+import io.ktor.client.plugins.websocket.*
+import io.ktor.http.*
+import io.ktor.websocket.*
+import kotlinx.coroutines.channels.toList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import ktx.log.logger
 import warped.realms.server.request.getter.GetterRequest
 import warped.realms.server.request.getter.IGetRequest
@@ -11,6 +18,9 @@ import java.util.concurrent.locks.ReentrantLock
 class ServerRequest() {
     val serverQueue: ServerQueue = ServerQueue()
     val clientQueue: ServerQueue = ServerQueue()
+    val client = HttpClient{
+        install(WebSockets)
+    }
 
     private val setterRequest: ISetRequest = SetterRequest(clientQueue)
     private val getterRequest: IGetRequest = GetterRequest(serverQueue)
@@ -18,21 +28,19 @@ class ServerRequest() {
     val lock = ReentrantLock()
 
     val got = Thread {
-        var cord: Int = 0
-        while (lock.isLocked) {
-            println("[CLIENT]-Try Get $cord + ${java.time.LocalTime.now()}")
-            cord = getterRequest.getData()
-            cord++
-            Thread.sleep(1200)
-        }
+
     }
     val send = Thread {
-        var data: Int = 110
-        while (lock.isLocked) {
-            data++
-            println("[CLIENT]-Try Send $data + ${java.time.LocalTime.now()}")
-            setterRequest.sendData(data)
-            Thread.sleep(1200)
+        runBlocking{
+            client.webSocket(HttpMethod.Get, host = "127.0.0.1", port = 8000, path = "/gate") {
+                var cord = 0
+                while (lock.isLocked) {
+                    val message = "[CLIENT]-Try Get $cord + ${java.time.LocalTime.now()}"
+                    send(message)
+                    cord++
+                    delay(1000L)
+                }
+            }
         }
     }
 
