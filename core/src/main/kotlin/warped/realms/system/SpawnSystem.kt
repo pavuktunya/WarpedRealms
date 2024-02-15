@@ -1,7 +1,6 @@
 package warped.realms.system
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
@@ -9,7 +8,6 @@ import ktx.app.gdxError
 import ktx.box2d.box
 import ktx.log.logger
 import ktx.math.vec2
-import ktx.tiled.type
 import ktx.tiled.x
 import ktx.tiled.y
 import warped.realms.component.*
@@ -21,12 +19,16 @@ import warped.realms.event.Event
 import warped.realms.event.IHandleEvent
 import warped.realms.event.MapChangeEvent
 import warped.realms.screen.Screen.Companion.UNIT_SCALE
-import warped.realms.world.System
+import System
+import generated.systems.createCmp
+import generated.systems.injectSys
 
 const val entityLayer = "entities"
 
-class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorld: World) : IteratingSystem(),
-    IHandleEvent {
+@System
+class SpawnSystem : IHandleEvent {
+    private val textureAtlas: TextureAtlas = injectSys<RenderSystem>().textureAtlas
+    private val phWorld: World = injectSys<PhysicSystem>().phWorld
 
     private val cachedEntity = mutableMapOf<String, Entity>()
     private val cachedSizes = mutableMapOf<AnimationModel, Vector2>()
@@ -78,18 +80,18 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
     }
 
     private fun spawn(entity: Entity) {
-        system.animationSystem.addAnimationComponent(entity.entityComponent.animationComponent to entity.entityComponent.imageComponent)
+        //system.animationSystem.addAnimationComponent(entity.entityComponent.animationComponent to entity.entityComponent.imageComponent)
     }
     private fun phys(physicComponent: PhysicComponent, imageComponent: ImageComponent) {
-        system.physicSystem.addPhysicComponent(physicComponent to imageComponent)
+        //system.physicSystem.addPhysicComponent(physicComponent to imageComponent)
     }
 
     private fun move(moveComponent: MoveComponent, physicComponent: PhysicComponent) {
-        system.moveSystem.addMoveComponent(moveComponent to physicComponent)
+        //system.moveSystem.addMoveComponent(moveComponent to physicComponent)
     }
     private fun input(moveComponent: MoveComponent, imageComponent: ImageComponent) {
-        system.inputProcessor.addMoveCmp(moveComponent)
-        system.cameraSystem.addTrecker(imageComponent)
+        //system.inputProcessor.addMoveCmp(moveComponent)
+        //system.cameraSystem.addTrecker(imageComponent)
     }
 
     private fun createPlayerEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): PlayerEntity {
@@ -128,13 +130,14 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
 
     private fun createEntity(name: String, cordX: Float = 0f, cordY: Float = 0f, size: Vector2): Entity {
         val animationComponent = AnimationComponent()
-        val imageComponent: ImageComponent = system.renderSystem.addActor(
-            TextureRegion(textureAtlas.findRegion("$name/idle"), 0, 0, 128, 128),
-            positionX = cordX,
-            positionY = cordY,
-            width = size.x,
-            height = size.y
-        )
+        val imageComponent: ImageComponent = createCmp<ImageComponent>()
+//            system.renderSystem.addActor(
+//            TextureRegion(textureAtlas.findRegion("$name/idle"), 0, 0, 128, 128),
+//            positionX = cordX,
+//            positionY = cordY,
+//            width = size.x,
+//            height = size.y
+//        )
         return Entity(
             imageComponent,
             TransformComponent(vec2(cordX, cordY)),
@@ -143,11 +146,10 @@ class SpawnSystem(val system: System, val textureAtlas: TextureAtlas, val phWorl
     }
 
 
-    override fun onTick(deltaTime: Float) {
-        super.onTick(deltaTime)
+    fun onTick(deltaTime: Float) {
     }
-    override fun dispose() {
-        super.dispose()
+
+    fun Dispose() {
     }
 
     companion object {

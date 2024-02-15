@@ -1,12 +1,14 @@
 package warped.realms.system
 
 import warped.realms.event.Event
+import System
 
-class EventSystem(
-    vararg events: Event
-): Event() {
-    private var events :Array<Event> = arrayOf(*events)
+@System
+class EventSystem : Event() {
+    private val events: Array<Event> = arrayOf()
+    fun Dispose() {
 
+    }
     fun addEvent(event: Event){
         events.plus(event)
     }

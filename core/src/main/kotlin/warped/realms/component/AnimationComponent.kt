@@ -3,8 +3,10 @@ package warped.realms.component
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import Component
 
-data class AnimationComponent(
+@Component
+class AnimationComponent(
     var atlasKey: AnimationModel = AnimationModel.UNDEFINED,
     var stateTime:Float=0f,
     var playMode: PlayMode = Animation.PlayMode.LOOP,

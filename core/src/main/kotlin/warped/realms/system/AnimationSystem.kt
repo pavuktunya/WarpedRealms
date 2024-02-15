@@ -1,5 +1,6 @@
 package warped.realms.system
 
+import PutComponent
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
@@ -9,16 +10,17 @@ import ktx.log.logger
 import warped.realms.component.AnimationComponent
 import warped.realms.component.AnimationComponent.Companion.NO_ANIMATION
 import warped.realms.component.ImageComponent
+import System
+import generated.systems.injectSys
 
-class AnimationSystem(
-    private val textureAtlas: TextureAtlas,
-    //private val animationCmp: AnimationComponent,
-    vararg animCmps: Pair<AnimationComponent, ImageComponent>
-):IteratingSystem() {
-    private val animCmps: MutableMap<AnimationComponent, ImageComponent> = mutableMapOf(*animCmps)
+@System
+@PutComponent(AnimationComponent::class)
+class AnimationSystem {
+    private val textureAtlas: TextureAtlas = injectSys<RenderSystem>().textureAtlas
+
+    private val animCmps: MutableMap<AnimationComponent, ImageComponent> = mutableMapOf()
     private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>()
-    override fun onTick(deltaTime: Float) {
-        super.onTick(deltaTime)
+    fun Update(deltaTime: Float) {
         animCmps.forEach { animationCmp, imageCmp ->
             if (animationCmp.nextAnimation == NO_ANIMATION) {
                 animationCmp.stateTime += deltaTime
@@ -31,6 +33,14 @@ class AnimationSystem(
             animationCmp.animation.playMode = animationCmp.playMode
             imageCmp.image.drawable = animationCmp.animation.getKeyFrame(animationCmp.stateTime)
         }
+    }
+
+    fun PutComponent(cmp: AnimationComponent) {
+
+    }
+
+    fun DeleteComponent(cmp: AnimationComponent) {
+
     }
 
     fun addAnimationComponent(vararg _animCmps: Pair<AnimationComponent, ImageComponent>) {
@@ -53,8 +63,7 @@ class AnimationSystem(
         }
     }
 
-    override fun dispose() {
-        super.dispose()
+    fun Dispose() {
     }
 
     companion object{

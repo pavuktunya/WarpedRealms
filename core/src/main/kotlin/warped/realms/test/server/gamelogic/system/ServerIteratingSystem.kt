@@ -1,8 +1,6 @@
 package warped.realms.test.server.gamelogic.system
 
-import warped.realms.world.IDispose
-
-open class ServerIteratingSystem(val interval: Interval = EachFrame()) : IDispose {
+open class ServerIteratingSystem(val interval: Interval = EachFrame()) {
     var accumulator: Float = 0f
     open fun onTick(deltaTime: Float) {
         when (interval) {
@@ -21,7 +19,7 @@ open class ServerIteratingSystem(val interval: Interval = EachFrame()) : IDispos
     open fun onUpdate(deltaTime: Float) {
     }
 
-    override fun dispose() {
+    fun dispose() {
     }
 }
 

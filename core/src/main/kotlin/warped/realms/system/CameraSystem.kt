@@ -4,15 +4,17 @@ import com.badlogic.gdx.graphics.Camera
 import ktx.tiled.height
 import ktx.tiled.width
 import warped.realms.component.ImageComponent
-import warped.realms.entity.PlayerEntity
 import warped.realms.event.Event
 import warped.realms.event.IHandleEvent
 import warped.realms.event.MapChangeEvent
+import System
+import Update
+import generated.systems.injectSys
 
-class CameraSystem(
-    camera: Camera,
-) : IteratingSystem(), IHandleEvent {
-    private val camera = camera
+@System
+@Update(0)
+class CameraSystem : IHandleEvent {
+    private val camera: Camera = injectSys<RenderSystem>().stage.camera
     private val imageCmps: MutableList<ImageComponent> = mutableListOf()
 
     private var maxW = 0f
@@ -22,8 +24,7 @@ class CameraSystem(
         imageCmps.add(imageComponent)
     }
 
-    override fun onTick(deltaTime: Float) {
-        super.onTick(deltaTime)
+    fun Update(deltaTime: Float) {
         val viewW = camera.viewportWidth * 0.5f
         val viewH = camera.viewportHeight * 0.5f
         with(imageCmps.last()) {
@@ -33,6 +34,9 @@ class CameraSystem(
                 camera.position.z
             )
         }
+    }
+
+    fun Dispose() {
     }
 
     override fun handle(event: Event): Boolean {

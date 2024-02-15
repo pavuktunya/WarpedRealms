@@ -1,13 +1,9 @@
 package warped.realms.test.server
 
-import kotlinx.coroutines.Runnable
 import warped.realms.test.queue.ServerQueue
 import warped.realms.test.server.gamelogic.ServerGameLogic
 import warped.realms.test.server.request.ClientRequest
-import warped.realms.world.IDispose
 import java.lang.Thread.sleep
-import java.util.concurrent.Executors
-import java.util.concurrent.locks.Lock
 import java.util.concurrent.locks.ReentrantLock
 
 class TestServer(serverQueue: ServerQueue, clientQueue: ServerQueue) {

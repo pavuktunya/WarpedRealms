@@ -10,6 +10,4 @@ class EnemyEntity(
     moveComponent,
     physicComponent,
     liveEntity.entityComponent
-) {
-
-}
+)

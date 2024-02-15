@@ -13,6 +13,4 @@ open class LiveEntity(
     imageComponent,
     transformComponent,
     animationComponent
-) {
-
-}
+)

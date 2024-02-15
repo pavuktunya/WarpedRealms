@@ -1,7 +1,6 @@
 package warped.realms.system
 
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
@@ -11,17 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.Scaling
 import ktx.assets.disposeSafely
 import ktx.graphics.use
-import ktx.log.debug
 import ktx.log.logger
 import warped.realms.component.ImageComponent
 import warped.realms.event.Event
 import warped.realms.event.IHandleEvent
 import warped.realms.event.MapChangeEvent
 import warped.realms.screen.Screen.Companion.UNIT_SCALE
+import System
+import Update
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.utils.viewport.ExtendViewport
+import ktx.assets.toInternalFile
 
-class RenderSystem(
-    val stage: Stage
-): IteratingSystem(), IHandleEvent {
+@System
+@Update(-1)
+class RenderSystem : IHandleEvent {
+    val textureAtlas: TextureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
+    val stage: Stage = Stage(ExtendViewport(16f, 9f, 1920f, 1080f))
+
     private var images = mutableListOf<ImageComponent>()
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>()
@@ -29,6 +35,28 @@ class RenderSystem(
     private val mapRenderer = OrthogonalTiledMapRenderer(null, UNIT_SCALE, stage.batch)
     private val orthoCam = stage.camera as OrthographicCamera
 
+    fun Update(deltaTime: Float) {
+        with(stage) {
+            viewport.apply()
+
+            AnimatedTiledMapTile.updateAnimationBaseTime()
+            mapRenderer.setView(orthoCam)
+            //mapRenderer.render()
+
+            renderTileLayer(bgdLayers)
+
+            act(deltaTime)
+            draw()
+
+            renderTileLayer(fgdLayers)
+        }
+    }
+
+    fun Dispose() {
+        textureAtlas.disposeSafely()
+        stage.disposeSafely()
+        mapRenderer.disposeSafely()
+    }
     fun addActor(
         texture: TextureRegion,
         scale: Float = 1f,
@@ -63,10 +91,6 @@ class RenderSystem(
         stage.viewport.update(width,height, true)
     }
 
-    override fun dispose(){
-        stage.disposeSafely()
-        mapRenderer.disposeSafely()
-    }
 
     override fun handle(event: Event): Boolean {
         when(event){
@@ -100,25 +124,6 @@ class RenderSystem(
                     mapRenderer.renderTileLayer(it)
                 }
             }
-        }
-    }
-
-    override fun onTick(deltaTime: Float) {
-        super.onTick(deltaTime)
-
-        with(stage){
-            viewport.apply()
-
-            AnimatedTiledMapTile.updateAnimationBaseTime()
-            mapRenderer.setView(orthoCam)
-            //mapRenderer.render()
-
-            renderTileLayer(bgdLayers)
-
-            act(deltaTime)
-            draw()
-
-            renderTileLayer(fgdLayers)
         }
     }
 

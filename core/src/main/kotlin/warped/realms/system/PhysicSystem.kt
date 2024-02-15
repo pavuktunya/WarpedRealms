@@ -2,20 +2,31 @@ package warped.realms.system
 
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.World
-import ktx.log.debug
 import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
-import warped.realms.component.AnimationComponent
 import warped.realms.component.ImageComponent
 import warped.realms.component.PhysicComponent
+import System
+import Update
+import ktx.box2d.createWorld
+import ktx.math.vec2
 
-class PhysicSystem(
-    private val phWorld: World,
-    vararg physCmps: Pair<PhysicComponent, ImageComponent>
-) : IteratingSystem(interval = Fixed(1 / 60f)) {
-    private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf(*physCmps)
+@System
+@Update(10)
+class PhysicSystem {
+    val phWorld: World = createWorld(gravity = vec2()).apply {
+        setAutoClearForces(false)
+    }
+    private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf()
 
+    fun Update(deltaTime: Float) {
+        if (phWorld.autoClearForces) {
+            log.error { "AutoClearForces must be set to false to guarantee a correct physic simulation." }
+            phWorld.autoClearForces = false
+        }
+        phWorld.clearForces()
+    }
 
     fun addPhysicComponent(vararg _physCmps: Pair<PhysicComponent, ImageComponent>) {
         physCmps.putAll(mutableMapOf(*_physCmps).also {
@@ -34,18 +45,9 @@ class PhysicSystem(
         })
     }
 
-    override fun onTick(deltaTime: Float) {
-        super.onTick(deltaTime)
-        if (phWorld.autoClearForces) {
-            log.error { "AutoClearForces must be set to false to guarantee a correct physic simulation." }
-            phWorld.autoClearForces = false
-        }
-        phWorld.clearForces()
-    }
 
     //Чтобы нагнать разницу в рендере и физики, вызывается несколько раз подряд
-    override fun onUpdate(deltaTime: Float) {
-        super.onUpdate(deltaTime)
+    fun onUpdate(deltaTime: Float) {
         phWorld.step(deltaTime, 6, 2)
         physCmps.forEach { physicCmp, imageCmp ->
             physicCmp.prevPos.set(physicCmp.body.position)
@@ -56,7 +58,8 @@ class PhysicSystem(
             }
         }
     }
-    override fun onAlpha(alpha: Float) {
+
+    fun onAlpha(alpha: Float) {
         physCmps.forEach { physicCmp, imageCmp ->
 
             val (prevX, prevY) = physicCmp.prevPos
@@ -70,8 +73,8 @@ class PhysicSystem(
             }
         }
     }
-    override fun dispose() {
-        super.dispose()
+
+    fun Dispose() {
     }
 
     companion object {

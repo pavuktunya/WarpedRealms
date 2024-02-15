@@ -1,1 +1,3 @@
 include 'core', 'lwjgl3'
+include 'processor'
+include 'annotation'

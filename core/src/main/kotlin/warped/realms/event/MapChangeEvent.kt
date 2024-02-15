@@ -1,7 +1,6 @@
 package warped.realms.event
 
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
 
 class MapChangeEvent(val mapLoader: TiledMap, vararg handlers: IHandleEvent): Event(){
     private var handlers = arrayOf<IHandleEvent>(*handlers)

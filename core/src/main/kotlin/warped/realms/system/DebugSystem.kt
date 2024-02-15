@@ -4,19 +4,22 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Stage
 import ktx.assets.disposeSafely
+import System
+import Update
+import generated.systems.injectSys
 
-class DebugSystem(
-    private val phWorld: World,
-    private val stage: Stage,
+@System
+@Update(1)
+class DebugSystem {
+    private val phWorld: World = injectSys<PhysicSystem>().phWorld
+    private val stage: Stage = injectSys<RenderSystem>().stage
+
     private val physicRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
-) : IteratingSystem() {
-    override fun onTick(deltaTime: Float) {
-        super.onTick(deltaTime)
+    fun Update(deltaTime: Float) {
         physicRenderer.render(phWorld, stage.camera.combined)
     }
 
-    override fun dispose() {
-        super.dispose()
+    fun Dispose() {
         physicRenderer.disposeSafely()
     }
 }

@@ -7,7 +7,6 @@ import ktx.app.KtxScreen
 import warped.realms.screen.Screen
 
 class WarpedRealms : KtxGame<KtxScreen>() {
-
     //private val camera: OrthographicCamera = OrthographicCamera(Gdx.graphics.width.toFloat(), Gdx.graphics.height.toFloat())
 
     override fun create() {

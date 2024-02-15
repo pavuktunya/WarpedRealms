@@ -2,14 +2,16 @@ package warped.realms.component
 
 import com.badlogic.gdx.math.Vector2
 import ktx.math.vec2
+import Component
 
-////////////
-data class SpawnCfg(
+@Component
+class SpawnCfg(
     val model: AnimationModel,
 )
 
-data class SpawnComponent (
+@Component
+class SpawnComponent(
     var type: String = "",
     var location: Vector2 = vec2()
 )
-/////////
+
