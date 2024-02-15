@@ -11,8 +11,8 @@ import generated.systems.injectSys
 @System
 @Update(1)
 class DebugSystem {
-    private val phWorld: World = injectSys<PhysicSystem>().phWorld
-    private val stage: Stage = injectSys<RenderSystem>().stage
+    private val phWorld: World = PhysicSystem.phWorld
+    private val stage: Stage = RenderSystem.stage
 
     private val physicRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
     fun Update(deltaTime: Float) {

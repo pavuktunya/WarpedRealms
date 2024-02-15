@@ -14,7 +14,7 @@ import generated.systems.injectSys
 @System
 @Update(0)
 class CameraSystem : IHandleEvent {
-    private val camera: Camera = injectSys<RenderSystem>().stage.camera
+    private val camera: Camera = RenderSystem.stage.camera
     private val imageCmps: MutableList<ImageComponent> = mutableListOf()
 
     private var maxW = 0f
@@ -25,15 +25,15 @@ class CameraSystem : IHandleEvent {
     }
 
     fun Update(deltaTime: Float) {
-        val viewW = camera.viewportWidth * 0.5f
-        val viewH = camera.viewportHeight * 0.5f
-        with(imageCmps.last()) {
-            camera.position.set(
-                (image.x + image.width * 0.5f).coerceIn(viewW, maxW - viewW),
-                (image.y + image.height * 0.5f).coerceIn(viewH, maxH - viewH),
-                camera.position.z
-            )
-        }
+//        val viewW = camera.viewportWidth * 0.5f
+//        val viewH = camera.viewportHeight * 0.5f
+//        with(imageCmps.last()) {
+//            camera.position.set(
+//                (image.x + image.width * 0.5f).coerceIn(viewW, maxW - viewW),
+//                (image.y + image.height * 0.5f).coerceIn(viewH, maxH - viewH),
+//                camera.position.z
+//            )
+//        }
     }
 
     fun Dispose() {

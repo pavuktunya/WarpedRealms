@@ -25,9 +25,6 @@ import ktx.assets.toInternalFile
 @System
 @Update(-1)
 class RenderSystem : IHandleEvent {
-    val textureAtlas: TextureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
-    val stage: Stage = Stage(ExtendViewport(16f, 9f, 1920f, 1080f))
-
     private var images = mutableListOf<ImageComponent>()
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>()
@@ -129,5 +126,7 @@ class RenderSystem : IHandleEvent {
 
     companion object{
         private val logger = logger<RenderSystem>()
+        val textureAtlas: TextureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
+        val stage: Stage = Stage(ExtendViewport(16f, 9f, 1920f, 1080f))
     }
 }

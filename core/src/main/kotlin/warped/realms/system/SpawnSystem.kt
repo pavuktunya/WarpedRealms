@@ -27,8 +27,8 @@ const val entityLayer = "entities"
 
 @System
 class SpawnSystem : IHandleEvent {
-    private val textureAtlas: TextureAtlas = injectSys<RenderSystem>().textureAtlas
-    private val phWorld: World = injectSys<PhysicSystem>().phWorld
+    private val textureAtlas: TextureAtlas = RenderSystem.textureAtlas
+    private val phWorld: World = PhysicSystem.phWorld
 
     private val cachedEntity = mutableMapOf<String, Entity>()
     private val cachedSizes = mutableMapOf<AnimationModel, Vector2>()

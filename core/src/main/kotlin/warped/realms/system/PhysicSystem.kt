@@ -15,9 +15,6 @@ import ktx.math.vec2
 @System
 @Update(10)
 class PhysicSystem {
-    val phWorld: World = createWorld(gravity = vec2()).apply {
-        setAutoClearForces(false)
-    }
     private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf()
 
     fun Update(deltaTime: Float) {
@@ -79,6 +76,8 @@ class PhysicSystem {
 
     companion object {
         private val log = logger<PhysicSystem>()
+        val phWorld: World = createWorld(gravity = vec2()).apply {
+            setAutoClearForces(false)
+        }
     }
-
 }

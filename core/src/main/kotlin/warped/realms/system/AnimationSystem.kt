@@ -16,7 +16,7 @@ import generated.systems.injectSys
 @System
 @PutComponent(AnimationComponent::class)
 class AnimationSystem {
-    private val textureAtlas: TextureAtlas = injectSys<RenderSystem>().textureAtlas
+    private val textureAtlas: TextureAtlas = RenderSystem.textureAtlas
 
     private val animCmps: MutableMap<AnimationComponent, ImageComponent> = mutableMapOf()
     private val cachedAnimations = mutableMapOf<String, Animation<TextureRegionDrawable>>()
