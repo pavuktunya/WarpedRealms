@@ -21,7 +21,8 @@ import warped.realms.event.MapChangeEvent
 import warped.realms.screen.Screen.Companion.UNIT_SCALE
 import System
 import generated.systems.createCmp
-import generated.systems.injectSys
+import warped.realms.system.update.PhysicSystem
+import warped.realms.system.update.RenderSystem
 
 const val entityLayer = "entities"
 
@@ -150,6 +151,7 @@ class SpawnSystem : IHandleEvent {
     }
 
     fun Dispose() {
+        println("[DISPOSE] ${this::class.simpleName}")
     }
 
     companion object {

@@ -1,5 +1,6 @@
-package warped.realms.system
+package warped.realms.system.update
 
+import PutComponent
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.World
 import ktx.log.logger
@@ -11,18 +12,45 @@ import System
 import Update
 import ktx.box2d.createWorld
 import ktx.math.vec2
+import warped.realms.system.Logger
+import warped.realms.system.debug
+import warped.realms.system.error
 
 @System
 @Update(10)
+@PutComponent(PhysicComponent::class, ImageComponent::class)
 class PhysicSystem {
     private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf()
 
     fun Update(deltaTime: Float) {
+        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+        println("[UPDATE] ${this::class.simpleName} $x")
+
         if (phWorld.autoClearForces) {
-            log.error { "AutoClearForces must be set to false to guarantee a correct physic simulation." }
+            Logger.error { "AutoClearForces must be set to false to guarantee a correct physic simulation." }
             phWorld.autoClearForces = false
         }
         phWorld.clearForces()
+    }
+
+    fun PutComponent(component: PhysicComponent) {
+
+        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun DeleteComponent(component: PhysicComponent) {
+
+        println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun PutComponent(component: ImageComponent) {
+
+        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun DeleteComponent(component: ImageComponent) {
+
+        println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
 
     fun addPhysicComponent(vararg _physCmps: Pair<PhysicComponent, ImageComponent>) {
@@ -72,10 +100,10 @@ class PhysicSystem {
     }
 
     fun Dispose() {
+        println("[DISPOSE] ${this::class.simpleName}")
     }
 
     companion object {
-        private val log = logger<PhysicSystem>()
         val phWorld: World = createWorld(gravity = vec2()).apply {
             setAutoClearForces(false)
         }

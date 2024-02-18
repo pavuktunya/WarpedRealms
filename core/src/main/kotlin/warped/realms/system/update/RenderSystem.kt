@@ -1,5 +1,6 @@
-package warped.realms.system
+package warped.realms.system.update
 
+import PutComponent
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -21,9 +22,12 @@ import Update
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.viewport.ExtendViewport
 import ktx.assets.toInternalFile
+import warped.realms.system.Logger
+import warped.realms.system.debug
 
 @System
 @Update(-1)
+@PutComponent(ImageComponent::class)
 class RenderSystem : IHandleEvent {
     private var images = mutableListOf<ImageComponent>()
 
@@ -33,6 +37,9 @@ class RenderSystem : IHandleEvent {
     private val orthoCam = stage.camera as OrthographicCamera
 
     fun Update(deltaTime: Float) {
+        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+        println("[UPDATE] ${this::class.simpleName} $x")
+
         with(stage) {
             viewport.apply()
 
@@ -49,7 +56,18 @@ class RenderSystem : IHandleEvent {
         }
     }
 
+    fun PutComponent(component: ImageComponent) {
+
+        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun DeleteComponent(component: ImageComponent) {
+
+        println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
     fun Dispose() {
+        println("[DISPOSE] ${this::class.simpleName}")
         textureAtlas.disposeSafely()
         stage.disposeSafely()
         mapRenderer.disposeSafely()
@@ -105,7 +123,7 @@ class RenderSystem : IHandleEvent {
                         bgdLayers.add(layer)
                     }
                     else {
-                        logger.debug { "Not found layer in switch construction: ${layer.name}" }
+                        Logger.debug { "Not found layer in switch construction: ${layer.name}" }
                     }
                 }
                 return true;
@@ -125,7 +143,6 @@ class RenderSystem : IHandleEvent {
     }
 
     companion object{
-        private val logger = logger<RenderSystem>()
         val textureAtlas: TextureAtlas = TextureAtlas("graphics/gameObject.atlas".toInternalFile())
         val stage: Stage = Stage(ExtendViewport(16f, 9f, 1920f, 1080f))
     }

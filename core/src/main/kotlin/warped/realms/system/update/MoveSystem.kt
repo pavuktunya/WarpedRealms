@@ -1,5 +1,6 @@
-package warped.realms.system
+package warped.realms.system.update
 
+import PutComponent
 import ktx.math.component1
 import ktx.math.component2
 import warped.realms.component.MoveComponent
@@ -9,6 +10,7 @@ import Update
 
 @System
 @Update(1)
+@PutComponent(MoveComponent::class, PhysicComponent::class)
 class MoveSystem {
     private val moveCmps: MutableMap<MoveComponent, PhysicComponent> = mutableMapOf()
     fun addMoveComponent(vararg _moveCmps: Pair<MoveComponent, PhysicComponent>) {
@@ -16,6 +18,9 @@ class MoveSystem {
     }
 
     fun Update(deltaTime: Float) {
+        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+        println("[UPDATE] ${this::class.simpleName} $x")
+
         moveCmps.forEach { moveCmp, physCmp ->
             val mass = physCmp.body.mass
             val (velX, velY) = physCmp.body.linearVelocity
@@ -32,6 +37,27 @@ class MoveSystem {
         }
     }
 
+    fun PutComponent(component: PhysicComponent) {
+
+        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun DeleteComponent(component: PhysicComponent) {
+
+        println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun PutComponent(component: MoveComponent) {
+
+        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun DeleteComponent(component: MoveComponent) {
+
+        println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
     fun Dispose() {
+        println("[DISPOSE] ${this::class.simpleName}")
     }
 }

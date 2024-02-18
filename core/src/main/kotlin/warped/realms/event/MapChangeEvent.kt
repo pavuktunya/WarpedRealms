@@ -1,8 +1,10 @@
 package warped.realms.event
 
 import com.badlogic.gdx.maps.tiled.TiledMap
+import warped.realms.system.Logger
+import warped.realms.system.debug
 
-class MapChangeEvent(val mapLoader: TiledMap, vararg handlers: IHandleEvent): Event(){
+class MapChangeEvent(val mapLoader: TiledMap, vararg handlers: IHandleEvent) : Event {
     private var handlers = arrayOf<IHandleEvent>(*handlers)
 
     fun addHandler(handler: IHandleEvent){
@@ -10,16 +12,9 @@ class MapChangeEvent(val mapLoader: TiledMap, vararg handlers: IHandleEvent): Ev
     }
 
     override fun onTick() {
-        logger.debug { "Event $this get pushed" }
-
-        super.onTick()
-
+        Logger.debug { "Event $this get pushed" }
         handlers.forEach {
             it.handle(this)
         }
-    }
-
-    companion object{
-        private val logger = ktx.log.logger<MapChangeEvent>()
     }
 }

@@ -1,5 +1,6 @@
-package warped.realms.system
+package warped.realms.system.update
 
+import PutComponent
 import com.badlogic.gdx.graphics.Camera
 import ktx.tiled.height
 import ktx.tiled.width
@@ -9,10 +10,10 @@ import warped.realms.event.IHandleEvent
 import warped.realms.event.MapChangeEvent
 import System
 import Update
-import generated.systems.injectSys
 
 @System
 @Update(0)
+@PutComponent(ImageComponent::class)
 class CameraSystem : IHandleEvent {
     private val camera: Camera = RenderSystem.stage.camera
     private val imageCmps: MutableList<ImageComponent> = mutableListOf()
@@ -25,6 +26,9 @@ class CameraSystem : IHandleEvent {
     }
 
     fun Update(deltaTime: Float) {
+        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+        println("[UPDATE] ${this::class.simpleName} $x")
+
 //        val viewW = camera.viewportWidth * 0.5f
 //        val viewH = camera.viewportHeight * 0.5f
 //        with(imageCmps.last()) {
@@ -36,7 +40,18 @@ class CameraSystem : IHandleEvent {
 //        }
     }
 
+    fun PutComponent(component: ImageComponent) {
+
+        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
+    fun DeleteComponent(component: ImageComponent) {
+
+        println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
+    }
+
     fun Dispose() {
+        println("[DISPOSE] ${this::class.simpleName}")
     }
 
     override fun handle(event: Event): Boolean {
