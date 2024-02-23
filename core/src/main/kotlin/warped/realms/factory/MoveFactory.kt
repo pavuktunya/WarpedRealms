@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 @Factory(MoveComponent::class)
 class MoveFactory {
-    fun Factory(p: KClass<MoveComponent>): MoveComponent {
+    fun Factory(lambda: () -> MoveComponent): MoveComponent {
         return MoveComponent()
     }
 

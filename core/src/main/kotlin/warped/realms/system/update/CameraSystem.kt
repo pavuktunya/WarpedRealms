@@ -13,7 +13,6 @@ import Update
 
 @System
 @Update(0)
-@PutComponent(ImageComponent::class)
 class CameraSystem : IHandleEvent {
     private val camera: Camera = RenderSystem.stage.camera
     private val imageCmps: MutableList<ImageComponent> = mutableListOf()
@@ -21,39 +20,40 @@ class CameraSystem : IHandleEvent {
     private var maxW = 0f
     private var maxH = 0f
 
-    fun addTrecker(imageComponent: ImageComponent) {
-        imageCmps.add(imageComponent)
+    fun addTrecker(component: ImageComponent) {
+        imageCmps.add(component)
     }
 
     fun Update(deltaTime: Float) {
-        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-        println("[UPDATE] ${this::class.simpleName} $x")
+//        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+//        println("[UPDATE] ${this::class.simpleName} $x")
 
-//        val viewW = camera.viewportWidth * 0.5f
-//        val viewH = camera.viewportHeight * 0.5f
-//        with(imageCmps.last()) {
-//            camera.position.set(
-//                (image.x + image.width * 0.5f).coerceIn(viewW, maxW - viewW),
-//                (image.y + image.height * 0.5f).coerceIn(viewH, maxH - viewH),
-//                camera.position.z
-//            )
-//        }
+        val viewW = camera.viewportWidth * 0.5f
+        val viewH = camera.viewportHeight * 0.5f
+        if (imageCmps.isNotEmpty()) {
+            with(imageCmps.last()) {
+                camera.position.set(
+                    (image.x + image.width * 0.5f).coerceIn(viewW, maxW - viewW),
+                    (image.y + image.height * 0.5f).coerceIn(viewH, maxH - viewH),
+                    camera.position.z
+                )
+            }
+        }
     }
 
-    fun PutComponent(component: ImageComponent) {
-
+    fun putComponent(component: ImageComponent) {
+        imageCmps.add(component)
         println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
     }
 
-    fun DeleteComponent(component: ImageComponent) {
-
+    fun deleteComponent(component: ImageComponent) {
+        imageCmps.remove(component)
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
 
     fun Dispose() {
         println("[DISPOSE] ${this::class.simpleName}")
     }
-
     override fun handle(event: Event): Boolean {
         when (event) {
             is MapChangeEvent -> {

@@ -15,8 +15,8 @@ class DebugSystem {
 
     private val physicRenderer: Box2DDebugRenderer = Box2DDebugRenderer()
     fun Update(deltaTime: Float) {
-        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-        println("[UPDATE] ${this::class.simpleName} $x")
+//        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+//        println("[UPDATE] ${this::class.simpleName} $x")
 
         physicRenderer.render(phWorld, stage.camera.combined)
     }

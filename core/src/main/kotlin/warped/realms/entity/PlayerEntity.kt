@@ -1,14 +1,15 @@
 package warped.realms.entity
 
-import warped.realms.component.*
+import generated.systems.initEntity
+import warped.realms.component.AnimationComponent
+import warped.realms.component.MoveComponent
+import warped.realms.component.PhysicComponent
 
-class PlayerEntity(
-    liveEntity: LiveEntity,
-    physicComponent: PhysicComponent = liveEntity.physicComponent,
-    moveComponent: MoveComponent = liveEntity.moveComponent,
-    val livingComponent: LivingComponent = LivingComponent(100f, 100f)
-) : LiveEntity(
-    moveComponent,
-    physicComponent,
-    liveEntity.entityComponent
-)
+class PlayerEntity : Entity() {
+    init {
+        addCmp { AnimationComponent() }
+        addCmp { PhysicComponent() }
+        addCmp { MoveComponent() }
+        initEntity()
+    }
+}

@@ -205,6 +205,7 @@ class Output(
             writer.appendLine("import kotlin.reflect.KClass")
             //writer.appendLine("import systems.test.injectCmpSys")
 //
+            writer.appendLine("import warped.realms.entity.Entity")
             val factories = mutableListOf<ClassName>()
             for (processedFactory in processed_factories) {
                 if (!factories.contains(processedFactory.value)) {
@@ -254,30 +255,54 @@ class Output(
             }
 ///
             writer.appendLine("    )\n")
-
-            writer.appendLine("    inline fun<reified T> put(cmp: T){")
-            writer.appendLine("        injectCmpSys<T>().forEach {")
-            writer.appendLine("            when(it){")
 //
+            writer.appendLine("    fun put(cmps: MutableMap<KClass<*>, Any>){")
+            for (i in 0..<processed_components.size) {
+                writer.appendLine("        val ${processed_components.toList()[i].simpleName}Cmps = mutableListOf<${processed_components.toList()[i].simpleName}>()")
+            }
+            writer.appendLine("        cmps.forEach { kcls, cmp ->")
+            writer.appendLine("            when(kcls){")
+            for (i in 0..<processed_components.size) {
+                writer.appendLine("                ${processed_components.toList()[i].simpleName}::class -> ${processed_components.toList()[i].simpleName}Cmps.add((cmp as ${processed_components.toList()[i].simpleName})!!)")
+            }
+            writer.appendLine("                else -> error(\"No such KClass<*> in your system\")")
+            writer.appendLine("            }")
+            writer.appendLine("        }")
+
             val systems2 = mutableListOf<ClassName>()
             for (i in 1..processed_component_system.size) {
                 for (j in 1..processed_component_system.toList()[i - 1].second.size) {
                     if (!systems2.contains(processed_component_system.toList()[i - 1].second[j - 1])) {
-                        writer.appendLine("                ${processed_component_system.toList()[i - 1].second[j - 1].simpleName}::class -> when(T::class){")
-                        processed_component_system.filter { it.value.contains(processed_component_system.toList()[i - 1].second[j - 1]) }
+                        val components = mutableListOf<String>()
+                        var str1 = ""
+                        var str2 = ""
+                        var str3 = ""
+                        processed_component_system.filter { it.value.contains(processed_component_system.toList()[i - 1].second[j - 1]) }.keys.reversed()
                             .forEach {
-                                writer.appendLine("                    ${it.key.simpleName}::class -> injectSys<${processed_component_system.toList()[i - 1].second[j - 1].simpleName}>().PutComponent((cmp as ${it.key.simpleName})!!)")
+                                components.add(it.simpleName)
+                                if (str1 == "")
+                                    str1 += it.simpleName + "Cmps.isNotEmpty()"
+                                else
+                                    str1 += " && " + it.simpleName + "Cmps.isNotEmpty()"
+                                if (str2 == "")
+                                    str2 += it.simpleName + "Cmps.size"
+                                else str2 += ", " + it.simpleName + "Cmps.size"
+                                if (str3 == "")
+                                    str3 += it.simpleName + "Cmps[i]"
+                                else str3 += ", " + it.simpleName + "Cmps[i]"
                             }
-                        writer.appendLine("                }")
+                        writer.appendLine("        if(${str1}) {")
+                        writer.appendLine("            val system = injectSys<${processed_component_system.toList()[i - 1].second[j - 1].simpleName}>()")
+                        writer.appendLine("            val maxSize = maxOf(${str2})")
+                        writer.appendLine("            for(i in 0..maxSize)")
+                        writer.appendLine("                system.PutComponent(${str3})")
+                        writer.appendLine("        }")
                         systems2.add(processed_component_system.toList()[i - 1].second[j - 1])
                     }
                 }
             }
+            writer.appendLine("    }\n")
 ///
-            writer.appendLine("            }")
-            writer.appendLine("        }")
-            writer.appendLine("    }")
-
             writer.appendLine("    inline fun<reified T> delete(cmp: T){")
             writer.appendLine("        injectCmpSys<T>().forEach {")
             writer.appendLine("            when(it){")
@@ -306,7 +331,7 @@ class Output(
             //writer.appendLine("public val ${scan_root.simpleName}.factories")
             //writer.appendLine("    get() = Factories\n")
 
-            writer.appendLine("inline fun <reified T> createCmp(): T{")
+            writer.appendLine("inline fun <reified T> createCmp(noinline lambda: ()-> T): T{")
             writer.appendLine("    val factory = injectFac<T>()")
             writer.appendLine("    val cmp = when(factory){")
 
@@ -316,7 +341,7 @@ class Output(
                 writer.appendLine("            when(T::class){")
                 val components = processed_component_factory.filter { it.value == factories[i - 1] }
                 components.forEach {
-                    writer.appendLine("                ${it.key.simpleName}::class -> Factories.factory${i}.Factory(${it.key.simpleName}::class)")
+                    writer.appendLine("                ${it.key.simpleName}::class -> Factories.factory${i}.Factory(lambda as (()-> ${it.key.simpleName}))")
                 }
                 writer.appendLine("                else -> error(\"No such components for factory \${T::class}\")")
                 writer.appendLine("            }")
@@ -324,13 +349,18 @@ class Output(
             }
 ///
             writer.appendLine("        else -> null")
-            writer.appendLine("    }!!.also {")
-            writer.appendLine("        Factories.put<T>((it as T)!!)")
             writer.appendLine("    }")
+//                "!!.also {")
+//            writer.appendLine("        Factories.put<T>((it as T)!!)")
+//            writer.appendLine("    }")
             writer.appendLine("    return (cmp as T)!!")
             writer.appendLine("}\n")
 
-
+//
+            writer.appendLine("inline fun Entity.initEntity(){")
+            writer.appendLine("    Factories.put(this.cmps)")
+            writer.appendLine("}\n")
+///
             writer.appendLine("inline fun <reified T> deleteCmp(cmp: T){")
             writer.appendLine("    Factories.delete<T>(cmp as T)")
             writer.appendLine("    val factory = injectFac<T>()")

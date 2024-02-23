@@ -8,8 +8,8 @@ import kotlin.reflect.KClass
 
 @Factory(ImageComponent::class)
 class ImageFactory {
-    fun Factory(p: KClass<ImageComponent>): ImageComponent {
-        return ImageComponent(Image())
+    fun Factory(lambda: () -> ImageComponent): ImageComponent {
+        return lambda.invoke()
     }
 
     fun Delete(cmp: ImageComponent) {

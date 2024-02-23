@@ -14,7 +14,7 @@ import warped.realms.system.SpawnSystem
 import warped.realms.system.debug
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    //      private val serverHandler = Server()
+    //    private val serverHandler = Server()
 //    private val server = TestServer(
 //        serverHandler.serverRequest.serverQueue,
 //        serverHandler.serverRequest.clientQueue
@@ -34,7 +34,7 @@ class Screen(game: WarpedRealms): AScreen(game) {
     }
     override fun render(delta: Float) {
         super.render(delta)
-        //systems.Update(delta)
+        systems.Update(delta)
     }
 
     //    var accumulator: Float = 0f
@@ -56,7 +56,6 @@ class Screen(game: WarpedRealms): AScreen(game) {
 //                onAlpha(accumulator / stepRate)
 //            }
 //        }
-//        */
     val renderSystem = injectSys<RenderSystem>()
     override fun resize(width: Int, height: Int) {
         super.resize(width, height)

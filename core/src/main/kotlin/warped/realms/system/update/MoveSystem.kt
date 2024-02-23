@@ -10,17 +10,17 @@ import Update
 
 @System
 @Update(1)
-@PutComponent(MoveComponent::class, PhysicComponent::class)
+@PutComponent(PhysicComponent::class, MoveComponent::class)
 class MoveSystem {
     private val moveCmps: MutableMap<MoveComponent, PhysicComponent> = mutableMapOf()
-    fun addMoveComponent(vararg _moveCmps: Pair<MoveComponent, PhysicComponent>) {
-        moveCmps.putAll(mutableMapOf(*_moveCmps))
+
+    fun PutComponent(physCmp: PhysicComponent, moveCmp: MoveComponent) {
+        moveCmps.put(moveCmp, physCmp)
+        println("[DEBUG] Put component ${physCmp::class.simpleName} in ${this::class.simpleName}")
     }
-
     fun Update(deltaTime: Float) {
-        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-        println("[UPDATE] ${this::class.simpleName} $x")
-
+//        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+//        println("[UPDATE] ${this::class.simpleName} $x")
         moveCmps.forEach { moveCmp, physCmp ->
             val mass = physCmp.body.mass
             val (velX, velY) = physCmp.body.linearVelocity
@@ -36,27 +36,12 @@ class MoveSystem {
             )
         }
     }
-
-    fun PutComponent(component: PhysicComponent) {
-
-        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
-    }
-
     fun DeleteComponent(component: PhysicComponent) {
-
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
-
-    fun PutComponent(component: MoveComponent) {
-
-        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
-    }
-
     fun DeleteComponent(component: MoveComponent) {
-
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
-
     fun Dispose() {
         println("[DISPOSE] ${this::class.simpleName}")
     }

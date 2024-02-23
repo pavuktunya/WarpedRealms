@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 @Factory(PhysicComponent::class)
 class PhysicFactory {
-    fun Factory(p: KClass<PhysicComponent>): PhysicComponent {
+    fun Factory(lambda: () -> PhysicComponent): PhysicComponent {
         return PhysicComponent()
     }
 

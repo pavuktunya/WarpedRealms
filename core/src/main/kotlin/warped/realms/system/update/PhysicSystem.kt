@@ -23,9 +23,8 @@ class PhysicSystem {
     private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf()
 
     fun Update(deltaTime: Float) {
-        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-        println("[UPDATE] ${this::class.simpleName} $x")
-
+//        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+//        println("[UPDATE] ${this::class.simpleName} $x")
         if (phWorld.autoClearForces) {
             Logger.error { "AutoClearForces must be set to false to guarantee a correct physic simulation." }
             phWorld.autoClearForces = false
@@ -33,44 +32,24 @@ class PhysicSystem {
         phWorld.clearForces()
     }
 
-    fun PutComponent(component: PhysicComponent) {
-
-        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
+    fun PutComponent(physCmp: PhysicComponent, imageCmp: ImageComponent) {
+        if (!physCmp.impulse.isZero) {
+            physCmp.body.applyLinearImpulse(physCmp.impulse, physCmp.body.worldCenter, true)
+            physCmp.impulse.setZero()
+        }
+        val vect = physCmp.body.position
+        imageCmp.image.run {
+            setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
+        }
+        physCmps.put(physCmp, imageCmp)
+        println("[DEBUG] Put component ${physCmp::class.simpleName} in ${this::class.simpleName}")
     }
-
     fun DeleteComponent(component: PhysicComponent) {
-
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
-
-    fun PutComponent(component: ImageComponent) {
-
-        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
-    }
-
     fun DeleteComponent(component: ImageComponent) {
-
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
-
-    fun addPhysicComponent(vararg _physCmps: Pair<PhysicComponent, ImageComponent>) {
-        physCmps.putAll(mutableMapOf(*_physCmps).also {
-            it.forEach { physicCmp, imageCmp ->
-
-                if (!physicCmp.impulse.isZero) {
-                    physicCmp.body.applyLinearImpulse(physicCmp.impulse, physicCmp.body.worldCenter, true)
-                    physicCmp.impulse.setZero()
-                }
-
-                val vect = physicCmp.body.position
-                imageCmp.image.run {
-                    setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
-                }
-            }
-        })
-    }
-
-
     //Чтобы нагнать разницу в рендере и физики, вызывается несколько раз подряд
     fun onUpdate(deltaTime: Float) {
         phWorld.step(deltaTime, 6, 2)
@@ -83,13 +62,10 @@ class PhysicSystem {
             }
         }
     }
-
     fun onAlpha(alpha: Float) {
         physCmps.forEach { physicCmp, imageCmp ->
-
             val (prevX, prevY) = physicCmp.prevPos
             val (bodyX, bodyY) = physicCmp.body.position
-
             imageCmp.image.run {
                 setPosition(
                     MathUtils.lerp(prevX, bodyX, alpha) - width * 0.5f,
@@ -98,11 +74,9 @@ class PhysicSystem {
             }
         }
     }
-
     fun Dispose() {
         println("[DISPOSE] ${this::class.simpleName}")
     }
-
     companion object {
         val phWorld: World = createWorld(gravity = vec2()).apply {
             setAutoClearForces(false)

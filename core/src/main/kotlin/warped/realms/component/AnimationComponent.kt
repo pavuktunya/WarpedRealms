@@ -18,20 +18,15 @@ class AnimationComponent(
         this.atlasKey=atlasKey
         nextAnimation="${atlasKey.atlasKey}/${type.atlasKey}"
     }
-
     companion object{
         val NO_ANIMATION = ""
     }
 }
-
 enum class AnimationModel{
     FANTAZY_WARRIOR, RAT, CHEST, UNDEFINED;
-
     val atlasKey:String = this. toString().lowercase()
 }
-
 enum class AnimationType {
     IDLE, RUN, ATTACK, DEATH, OPEN;
-
     val atlasKey:String = this.toString().lowercase()
 }

@@ -15,16 +15,15 @@ class PhysicComponent() {
     val prevPos = vec2()
     val impulse = vec2()
     lateinit var body: Body
+
     fun onAdded(entity: Entity, component: PhysicComponent = this) {
         component.body.userData = entity
     }
-
     fun onRemoved(entity: Entity, component: PhysicComponent = this) {
         val body = component.body
         body.world.destroyBody(body)
         body.userData = null
     }
-
     companion object {
         fun physicCmpFromImage(
             world: World,
