@@ -37,10 +37,6 @@ class ServerPhysicSystem(
         phWorld.step(deltaTime, 6, 2)
     }
 
-    override fun dispose() {
-        super.dispose()
-    }
-
     companion object {
         private val log = logger<ServerPhysicSystem>()
     }

@@ -1,60 +1,71 @@
 package warped.realms.screen
 
-
-import ktx.assets.disposeSafely
-import ktx.box2d.createWorld
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import generated.systems.Systems
+import generated.systems.injectSys
 import ktx.log.logger
-import ktx.math.vec2
 import warped.realms.WarpedRealms
-import warped.realms.input.PlayerKeyboardInputProcessor
-import warped.realms.server.Server
-import warped.realms.test.server.TestServer
-import warped.realms.world.System
-import warped.realms.world.World
-import java.util.concurrent.locks.ReentrantLock
+import warped.realms.event.MapChangeEvent
+import warped.realms.system.update.CameraSystem
+import warped.realms.system.EventSystem
+import warped.realms.system.Logger
+import warped.realms.system.update.RenderSystem
+import warped.realms.system.SpawnSystem
+import warped.realms.system.debug
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    private val serverHandler = Server()
-    private val server = TestServer(
-        serverHandler.serverRequest.serverQueue,
-        serverHandler.serverRequest.clientQueue
+    //    private val serverHandler = Server()
+//    private val server = TestServer(
+//        serverHandler.serverRequest.serverQueue,
+//        serverHandler.serverRequest.clientQueue
+//    )
+    private val titledMap = TmxMapLoader().load("map/map_1.tmx")
+    private val systems = Systems
+    private val mapChangeEvent = MapChangeEvent(
+        titledMap,
+        injectSys<RenderSystem>(),
+        injectSys<SpawnSystem>(),
+        injectSys<CameraSystem>()
     )
-
-    private val phWorld = createWorld(gravity = vec2()).apply {
-        setAutoClearForces(false)
-    }
-    private val inputProcessor: PlayerKeyboardInputProcessor = PlayerKeyboardInputProcessor()
-
-    private val system: System = System(phWorld, inputProcessor)
-    private val world = World(*system.getIteratingSystem())
-
     override fun show() {
         super.show()
-        log.debug{"Game screen shown"}
-        system.show()
+        Logger.debug { "Game screen shown" }
+        mapChangeEvent.onTick()
     }
     override fun render(delta: Float) {
         super.render(delta)
-        world.onTick(delta.coerceAtMost(0.25f))
+        systems.Update(delta)
     }
 
+    //    var accumulator: Float = 0f
+//    fun onTick(deltaTime: Float){
+//        /*
+//        when (interval) {
+//            is Fixed -> {
+//                accumulator += deltaTime
+//                val stepRate = interval.step
+//
+//                if (accumulator < stepRate) {
+//                    return
+//                }
+//
+//                while (accumulator >= stepRate) {
+//                    onUpdate(deltaTime)
+//                    accumulator -= stepRate
+//                }
+//                onAlpha(accumulator / stepRate)
+//            }
+//        }
+    val renderSystem = injectSys<RenderSystem>()
     override fun resize(width: Int, height: Int) {
         super.resize(width, height)
-        system.resize(width, height)
+        renderSystem.resize(width, height)
     }
-
     override fun dispose() {
         super.dispose()
-        server.dispose()
-        serverHandler.dispose()
-
-        system.dispose()
-        world.dispose()
-        phWorld.disposeSafely()
+        systems.Dispose()
     }
-
     companion object{
-        private val log = logger<Screen>()
         const val UNIT_SCALE = 1 / 24f
     }
 }

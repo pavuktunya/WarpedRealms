@@ -2,15 +2,15 @@ package warped.realms.input
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input.Keys.*
-import com.badlogic.gdx.InputMultiplexer
 import ktx.app.KtxInputAdapter
 import ktx.log.logger
 import warped.realms.component.MoveComponent
-import warped.realms.entity.PlayerEntity
+import System
 
-class PlayerKeyboardInputProcessor(
+@System
+class PlayerKeyboardInputProcessor : KtxInputAdapter {
     private val moveCmps: MutableList<MoveComponent> = mutableListOf()
-) : KtxInputAdapter {
+
     private var playerCos: Float = 0f
     private var playerSin: Float = 0f
     fun addMoveCmp(moveComponent: MoveComponent) {
@@ -20,6 +20,10 @@ class PlayerKeyboardInputProcessor(
     init {
         Gdx.input.inputProcessor = this
         //Gdx.input.inputProcessor = InputMultiplexer()
+    }
+
+    fun Dispose() {
+
     }
 
     override fun keyDown(keycode: Int): Boolean {

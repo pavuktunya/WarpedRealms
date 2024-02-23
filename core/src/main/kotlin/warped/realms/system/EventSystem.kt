@@ -1,19 +1,19 @@
 package warped.realms.system
 
 import warped.realms.event.Event
+import System
 
-class EventSystem(
-    vararg events: Event
-): Event() {
-    private var events :Array<Event> = arrayOf(*events)
-
-    fun addEvent(event: Event){
-        events.plus(event)
-    }
-    override fun onTick() {
-        super.onTick()
-        events.forEach {
-            it.onTick()
-        }
-    }
+class EventSystem {
+//    private val events: Array<Event> = arrayOf()
+//    fun Dispose() {
+//        println("[DISPOSE] ${this::class.simpleName}")
+//    }
+//    fun addEvent(event: Event){
+//        events.plus(event)
+//    }
+//    fun onTick() {
+//        events.forEach {
+//            it.onTick()
+//        }
+//    }
 }

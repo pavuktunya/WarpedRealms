@@ -1,22 +1,15 @@
 package warped.realms.entity
 
-import warped.realms.component.AnimationComponent
-import warped.realms.component.EntityComponent
-import warped.realms.component.ImageComponent
-import warped.realms.component.TransformComponent
-import warped.realms.world.IDispose
+import generated.systems.createCmp
+import kotlin.reflect.KClass
 
-open class Entity(
-    imageComponent: ImageComponent,
-    transformComponent: TransformComponent,
-    animationComponent: AnimationComponent,
-    val entityComponent: EntityComponent = EntityComponent(
-        imageComponent,
-        transformComponent,
-        animationComponent
-    )
-): IDispose{
-    override fun dispose() {
-        entityComponent.dispose()
+open class Entity {
+    val cmps: MutableMap<KClass<*>, Any> = mutableMapOf()
+    protected inline fun <reified T : Any> addCmp(noinline p: () -> T) {
+        if (!cmps.equals(T::class)) cmps.put(T::class, createCmp<T>(p))
+    }
+
+    inline fun <reified T> getCmp(): T {
+        return (cmps.get(T::class) as T)!!
     }
 }

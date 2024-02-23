@@ -1,7 +1,9 @@
 package warped.realms.component
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import Component
 
+@Component
 class ImageComponent(
     val image: Image
 ):Comparable<ImageComponent> {

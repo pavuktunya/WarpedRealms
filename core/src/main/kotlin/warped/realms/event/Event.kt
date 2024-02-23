@@ -1,7 +1,5 @@
 package warped.realms.event
 
-abstract class Event {
-    open fun onTick(){
-
-    }
+interface Event {
+    abstract fun onTick()
 }
