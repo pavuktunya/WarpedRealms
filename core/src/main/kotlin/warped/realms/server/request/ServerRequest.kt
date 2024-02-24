@@ -1,44 +1,53 @@
 package warped.realms.server.request
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.channels.toList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import ktx.log.logger
-import warped.realms.server.request.getter.GetterRequest
-import warped.realms.server.request.getter.IGetRequest
-import warped.realms.server.request.setter.ISetRequest
-import warped.realms.server.request.setter.SetterRequest
-import warped.realms.test.queue.ServerQueue
 import java.util.concurrent.locks.ReentrantLock
 
 class ServerRequest() {
-    val serverQueue: ServerQueue = ServerQueue()
-    val clientQueue: ServerQueue = ServerQueue()
-    val client = HttpClient{
+//    val serverQueue: ServerQueue = ServerQueue()
+//    val clientQueue: ServerQueue = ServerQueue()
+    private val gotClient = HttpClient{
+        install(WebSockets)
+    }
+    private val sendClient = HttpClient{
         install(WebSockets)
     }
 
-    private val setterRequest: ISetRequest = SetterRequest(clientQueue)
-    private val getterRequest: IGetRequest = GetterRequest(serverQueue)
+//    private val setterRequest: ISetRequest = SetterRequest(clientQueue)
+//    private val getterRequest: IGetRequest = GetterRequest(serverQueue)
 
-    val lock = ReentrantLock()
+    private val lock = ReentrantLock()
 
-    val got = Thread {
-
+    private val got = Thread {
+        runBlocking {
+            val objectMapper = jacksonObjectMapper()
+            gotClient.webSocket(method = HttpMethod.Get, port = 8080, host = "0.0.0.0", path = "/connection") {
+                for (frame in incoming) {
+                    frame as? Frame.Binary ?: continue
+                    val someData = objectMapper.readValue<SomeData>(frame.readBytes())
+                    println(someData)
+                    delay(250L)
+                }
+            }
+        }
     }
-    val send = Thread {
-        runBlocking{
-            client.webSocket(HttpMethod.Get, host = "127.0.0.1", port = 8000, path = "/gate") {
-                var cord = 0
-                while (lock.isLocked) {
-                    val message = "[CLIENT]-Try Get $cord + ${java.time.LocalTime.now()}"
-                    send(message)
-                    cord++
-                    delay(1000L)
+    private val send = Thread {
+        runBlocking {
+            val someData = SomeData("sdsadkasdhasdjashdasd", 4324, 12321)
+            val objectMapper = jacksonObjectMapper()
+            sendClient.webSocket(method = HttpMethod.Put, port = 8080, host = "0.0.0.0", path = "/connection") {
+                while (true) {
+                    val someDataBinary = objectMapper.writeValueAsBytes(someData)
+                    send(Frame.Binary(true, someDataBinary))
+                    delay(250L)
                 }
             }
         }
@@ -53,9 +62,9 @@ class ServerRequest() {
 
     fun dispose() {
         lock.unlock()
-        serverQueue.stackEmptyCondition.signalAll()
+        //serverQueue.stackEmptyCondition.signalAll()
         got.join()
-        clientQueue.stackFullCondition.signalAll()
+        //clientQueue.stackFullCondition.signalAll()
         send.join()
     }
 
