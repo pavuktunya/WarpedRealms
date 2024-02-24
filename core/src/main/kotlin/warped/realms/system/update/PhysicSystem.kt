@@ -12,6 +12,7 @@ import System
 import Update
 import ktx.box2d.createWorld
 import ktx.math.vec2
+import warped.realms.entity.Entity
 import warped.realms.system.Logger
 import warped.realms.system.debug
 import warped.realms.system.error
@@ -34,17 +35,21 @@ class PhysicSystem {
 
     fun PutComponent(physCmp: PhysicComponent, imageCmp: ImageComponent) {
         if (!physCmp.impulse.isZero) {
-            physCmp.body.applyLinearImpulse(physCmp.impulse, physCmp.body.worldCenter, true)
+            physCmp.body!!.applyLinearImpulse(physCmp.impulse, physCmp.body.worldCenter, true)
             physCmp.impulse.setZero()
         }
-        val vect = physCmp.body.position
+        val vect = physCmp.body!!.position
         imageCmp.image.run {
             setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
         }
         physCmps.put(physCmp, imageCmp)
         println("[DEBUG] Put component ${physCmp::class.simpleName} in ${this::class.simpleName}")
     }
+
     fun DeleteComponent(component: PhysicComponent) {
+        val body = component.body!!
+        body.world.destroyBody(body)
+        body.userData = null
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
     fun DeleteComponent(component: ImageComponent) {
@@ -54,7 +59,7 @@ class PhysicSystem {
     fun onUpdate(deltaTime: Float) {
         phWorld.step(deltaTime, 6, 2)
         physCmps.forEach { physicCmp, imageCmp ->
-            physicCmp.prevPos.set(physicCmp.body.position)
+            physicCmp.prevPos.set(physicCmp.body!!.position)
 
             if (!physicCmp.impulse.isZero) {
                 physicCmp.body.applyLinearImpulse(physicCmp.impulse, physicCmp.body.worldCenter, true)
@@ -65,7 +70,7 @@ class PhysicSystem {
     fun onAlpha(alpha: Float) {
         physCmps.forEach { physicCmp, imageCmp ->
             val (prevX, prevY) = physicCmp.prevPos
-            val (bodyX, bodyY) = physicCmp.body.position
+            val (bodyX, bodyY) = physicCmp.body!!.position
             imageCmp.image.run {
                 setPosition(
                     MathUtils.lerp(prevX, bodyX, alpha) - width * 0.5f,

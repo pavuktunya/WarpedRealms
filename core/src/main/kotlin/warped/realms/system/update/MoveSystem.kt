@@ -22,7 +22,7 @@ class MoveSystem {
 //        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
 //        println("[UPDATE] ${this::class.simpleName} $x")
         moveCmps.forEach { moveCmp, physCmp ->
-            val mass = physCmp.body.mass
+            val mass = physCmp.body!!.mass
             val (velX, velY) = physCmp.body.linearVelocity
             if (moveCmp.cos == 0f && moveCmp.sin == 0f) {
                 physCmp.impulse.set(
