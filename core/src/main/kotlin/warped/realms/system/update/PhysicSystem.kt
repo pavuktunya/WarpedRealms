@@ -65,6 +65,7 @@ class PhysicSystem {
                 physicCmp.impulse.setZero()
             }
         }
+        onAlpha(deltaTime)
     }
     fun onAlpha(alpha: Float) {
         physCmps.forEach { physicCmp, imageCmp ->

@@ -26,7 +26,7 @@ import warped.realms.system.Logger
 import warped.realms.system.debug
 
 @System
-@Update(-1)
+@Update(0)
 @PutComponent(ImageComponent::class)
 class RenderSystem : IHandleEvent {
     private var images = mutableListOf<ImageComponent>()
@@ -37,8 +37,8 @@ class RenderSystem : IHandleEvent {
     private val orthoCam = stage.camera as OrthographicCamera
 
     fun Update(deltaTime: Float) {
-//      val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-//      println("[UPDATE] ${this::class.simpleName} $x")
+        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+        println("[UPDATE] ${this::class.simpleName} $x")
 //      println("TIME: ${1 / deltaTime}")
         with(stage) {
             viewport.apply()

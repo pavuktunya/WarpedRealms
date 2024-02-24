@@ -16,7 +16,7 @@ import warped.realms.system.Logger
 import warped.realms.system.debug
 
 @System
-@Update(0)
+@Update(1)
 @PutComponent(ImageComponent::class, AnimationComponent::class)
 class AnimationSystem {
     private val textureAtlas: TextureAtlas = RenderSystem.textureAtlas

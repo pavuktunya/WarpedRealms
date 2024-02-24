@@ -130,7 +130,7 @@ class SpawnSystem : IHandleEvent {
                     box(width, height) {
                         isSensor = false
                     }
-                }.apply { this.body?.userData = this }
+                }.apply { this.body!!.userData = this }
             }, {
                 MoveComponent(speed)
             }
@@ -150,8 +150,9 @@ class SpawnSystem : IHandleEvent {
                 fixedRotation = true
                 allowSleep = false
                 bodyDefinition = this
+                bodyDefinition.fixtureAction(PhysicComponent(), image.width, image.height)
             }
-        ).apply { bodyDefinition.fixtureAction(this, image.width, image.height) }
+        ).also { bodyDefinition.fixtureAction(it, image.width, image.height) }
     }
     fun Dispose() {
         println("[DISPOSE] ${this::class.simpleName}")
