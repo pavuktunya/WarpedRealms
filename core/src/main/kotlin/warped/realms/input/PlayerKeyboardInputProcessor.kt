@@ -16,16 +16,13 @@ class PlayerKeyboardInputProcessor : KtxInputAdapter {
     fun addMoveCmp(moveComponent: MoveComponent) {
         moveCmps.add(moveComponent)
     }
-
     init {
         Gdx.input.inputProcessor = this
         //Gdx.input.inputProcessor = InputMultiplexer()
     }
-
     fun Dispose() {
 
     }
-
     override fun keyDown(keycode: Int): Boolean {
         if (keycode.isMovementKey()) {
             when (keycode) {
@@ -39,7 +36,6 @@ class PlayerKeyboardInputProcessor : KtxInputAdapter {
         }
         return false
     }
-
     override fun keyUp(keycode: Int): Boolean {
         if (keycode.isMovementKey()) {
             when (keycode) {
@@ -53,7 +49,6 @@ class PlayerKeyboardInputProcessor : KtxInputAdapter {
         }
         return false
     }
-
     private fun updatePlayerMovement() {
         moveCmps.forEach {
             it.apply {
@@ -62,11 +57,9 @@ class PlayerKeyboardInputProcessor : KtxInputAdapter {
             }
         }
     }
-
     private fun Int.isMovementKey(): Boolean {
         return this == UP || this == DOWN || this == RIGHT || this == LEFT
     }
-
     companion object {
         val logger = logger<PlayerKeyboardInputProcessor>()
     }

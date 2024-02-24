@@ -88,10 +88,12 @@ class SpawnSystem : IHandleEvent {
 
     private fun createEntity(
         model: AnimationModel,
-        cordX: Float = 0f,
-        cordY: Float = 0f,
+        cordX: Float = 1f,
+        cordY: Float = 1f,
         size: Vector2,
-        speed: Float
+        speed: Float,
+        width: Float = 1f * size.x,
+        height: Float = 1f * size.y,
     ): GameEntity {
         val texture: TextureRegion = TextureRegion(
             textureAtlas.findRegion("${model.atlasKey}/idle"),

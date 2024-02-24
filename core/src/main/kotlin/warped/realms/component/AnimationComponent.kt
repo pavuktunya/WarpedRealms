@@ -13,14 +13,14 @@ class AnimationComponent(
     var nextAnimation:String = ""
 ){
     lateinit var animation: Animation<TextureRegionDrawable>
-
-    fun nextAnimation(atlasKey: AnimationModel, type: AnimationType){
-        this.atlasKey=atlasKey
-        nextAnimation="${atlasKey.atlasKey}/${type.atlasKey}"
-    }
     companion object{
         val NO_ANIMATION = ""
     }
+}
+
+inline fun AnimationComponent.nextAnimation(atlasKey: AnimationModel, type: AnimationType) {
+    this.atlasKey = atlasKey
+    nextAnimation = "${atlasKey.atlasKey}/${type.atlasKey}"
 }
 enum class AnimationModel{
     FANTAZY_WARRIOR, RAT, CHEST, UNDEFINED;

@@ -62,8 +62,8 @@ class Screen(game: WarpedRealms): AScreen(game) {
         renderSystem.resize(width, height)
     }
     override fun dispose() {
-        super.dispose()
         systems.Dispose()
+        super.dispose()
     }
     companion object{
         const val UNIT_SCALE = 1 / 24f

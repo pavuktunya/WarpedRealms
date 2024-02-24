@@ -24,15 +24,15 @@ class PhysicSystem {
     private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf()
 
     fun Update(deltaTime: Float) {
-//        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-//        println("[UPDATE] ${this::class.simpleName} $x")
+//      val x = this.javaClass.getAnnotation(Update::class.java)?.priority
+//      println("[UPDATE] ${this::class.simpleName} $x")
         if (phWorld.autoClearForces) {
             Logger.error { "AutoClearForces must be set to false to guarantee a correct physic simulation." }
             phWorld.autoClearForces = false
         }
+        onUpdate(deltaTime)
         phWorld.clearForces()
     }
-
     fun PutComponent(physCmp: PhysicComponent, imageCmp: ImageComponent) {
         if (!physCmp.impulse.isZero) {
             physCmp.body!!.applyLinearImpulse(physCmp.impulse, physCmp.body.worldCenter, true)
@@ -42,10 +42,9 @@ class PhysicSystem {
         imageCmp.image.run {
             setPosition(vect.x - width * 0.5f, vect.y - height * 0.5f)
         }
-        physCmps.put(physCmp, imageCmp)
+        physCmps[physCmp] = imageCmp
         println("[DEBUG] Put component ${physCmp::class.simpleName} in ${this::class.simpleName}")
     }
-
     fun DeleteComponent(component: PhysicComponent) {
         val body = component.body!!
         body.world.destroyBody(body)
