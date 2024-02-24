@@ -9,7 +9,7 @@ import System
 import Update
 
 @System
-@Update(1)
+@Update(2)
 @PutComponent(PhysicComponent::class, MoveComponent::class)
 class MoveSystem {
     private val moveCmps: MutableMap<MoveComponent, PhysicComponent> = mutableMapOf()

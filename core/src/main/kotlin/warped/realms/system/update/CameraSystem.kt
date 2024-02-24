@@ -12,7 +12,7 @@ import System
 import Update
 
 @System
-@Update(0)
+@Update(1)
 class CameraSystem : IHandleEvent {
     private val camera: Camera = RenderSystem.stage.camera
     private val imageCmps: MutableList<ImageComponent> = mutableListOf()
