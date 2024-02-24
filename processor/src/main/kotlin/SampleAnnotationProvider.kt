@@ -293,8 +293,8 @@ class Output(
                             }
                         writer.appendLine("        if(${str1}) {")
                         writer.appendLine("            val system = injectSys<${processed_component_system.toList()[i - 1].second[j - 1].simpleName}>()")
-                        writer.appendLine("            val maxSize = maxOf(${str2})")
-                        writer.appendLine("            for(i in 0..maxSize)")
+                        writer.appendLine("            val maxSize = minOf(${str2})")
+                        writer.appendLine("            for(i in 0..<maxSize)")
                         writer.appendLine("                system.PutComponent(${str3})")
                         writer.appendLine("        }")
                         systems2.add(processed_component_system.toList()[i - 1].second[j - 1])

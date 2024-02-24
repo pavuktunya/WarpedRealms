@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 @Factory(MoveComponent::class)
 class MoveFactory {
     fun Factory(lambda: () -> MoveComponent): MoveComponent {
-        return MoveComponent()
+        return lambda.invoke()
     }
 
     fun Delete(cmp: MoveComponent) {

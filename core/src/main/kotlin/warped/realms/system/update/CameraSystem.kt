@@ -23,7 +23,6 @@ class CameraSystem : IHandleEvent {
     fun addTrecker(component: ImageComponent) {
         imageCmps.add(component)
     }
-
     fun Update(deltaTime: Float) {
 //        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
 //        println("[UPDATE] ${this::class.simpleName} $x")
@@ -40,17 +39,10 @@ class CameraSystem : IHandleEvent {
             }
         }
     }
-
-    fun putComponent(component: ImageComponent) {
-        imageCmps.add(component)
-        println("[DEBUG] Put component ${component::class.simpleName} in ${this::class.simpleName}")
-    }
-
     fun deleteComponent(component: ImageComponent) {
         imageCmps.remove(component)
         println("[DEBUG] Delete component ${component::class.simpleName} in ${this::class.simpleName}")
     }
-
     fun Dispose() {
         println("[DISPOSE] ${this::class.simpleName}")
     }
