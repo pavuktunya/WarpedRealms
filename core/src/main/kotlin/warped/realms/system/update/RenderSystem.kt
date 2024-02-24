@@ -38,8 +38,6 @@ class RenderSystem : IHandleEvent {
     private val orthoCam = stage.camera as OrthographicCamera
 
     fun Update(deltaTime: Float) {
-        val x = this.javaClass.getAnnotation(Update::class.java)?.priority
-        println("[UPDATE] ${this::class.simpleName} $x")
 //      println("TIME: ${1 / deltaTime}")
         with(stage) {
             viewport.apply()

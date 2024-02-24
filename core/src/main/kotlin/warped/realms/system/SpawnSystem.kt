@@ -35,24 +35,31 @@ class SpawnSystem : IHandleEvent {
     private val textureAtlas: TextureAtlas = RenderSystem.textureAtlas
     private val phWorld: World = PhysicSystem.phWorld
 
-    private val cachedEntity = mutableMapOf<entityType, Entity>()
+    //private val cachedEntity = mutableMapOf<entityType, Entity>()
     private val cachedSizes = mutableMapOf<AnimationModel, Vector2>()
 
-    private fun spawnCfg(type: entityType, posX: Float, posY: Float): Entity = cachedEntity.getOrPut(type) {
-        when (type) {
-            entityType.PLAYER -> createEntity(
-                AnimationModel.FANTAZY_WARRIOR,
-                posX,
-                posY,
-                size(AnimationModel.FANTAZY_WARRIOR),
-                8f
-            ).apply {
-                input(this)
-            }.also { Logger.debug { "Player has spawned with size: ${size(AnimationModel.FANTAZY_WARRIOR)}!" } }
-
-            entityType.RAT -> createEntity(AnimationModel.RAT, posX, posY, size(AnimationModel.RAT), 5f)
-                .also { Logger.debug { "Enemy has spawned with size: ${size(AnimationModel.RAT)}!" } }
+    private fun spawnCfg(type: entityType, posX: Float, posY: Float): Entity = when (type) {
+        entityType.PLAYER -> createEntity(
+            AnimationModel.FANTAZY_WARRIOR,
+            posX,
+            posY,
+            size(AnimationModel.FANTAZY_WARRIOR),
+            8f,
+            physicScaling = vec2(0.3f, 0.3f),
+            physicOffset = vec2(0f, -10f * UNIT_SCALE)
+        ).apply {
+            input(this)
+        }.also {
+            Logger.debug { "Player has spawned with size: ${size(AnimationModel.FANTAZY_WARRIOR)}!" }
         }
+
+        entityType.RAT -> createEntity(
+            AnimationModel.RAT,
+            posX,
+            posY,
+            size(AnimationModel.RAT),
+            5f
+        ).also { Logger.debug { "Enemy has spawned with size: ${size(AnimationModel.RAT)}!" } }
     }
     override fun handle(event: Event): Boolean {
         when(event){
@@ -92,6 +99,8 @@ class SpawnSystem : IHandleEvent {
         cordY: Float = 1f,
         size: Vector2,
         speed: Float,
+        physicScaling: Vector2 = vec2(1f, 1f),
+        physicOffset: Vector2 = vec2(0f, 0f),
         width: Float = 1f * size.x,
         height: Float = 1f * size.y,
     ): GameEntity {
