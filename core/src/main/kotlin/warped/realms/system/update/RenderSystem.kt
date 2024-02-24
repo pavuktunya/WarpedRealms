@@ -29,6 +29,7 @@ import warped.realms.system.debug
 @Update(0)
 @PutComponent(ImageComponent::class)
 class RenderSystem : IHandleEvent {
+    ///
     private var images = mutableListOf<ImageComponent>()
 
     private val bgdLayers = mutableListOf<TiledMapTileLayer>()
