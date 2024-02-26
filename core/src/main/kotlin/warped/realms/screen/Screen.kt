@@ -3,11 +3,10 @@ package warped.realms.screen
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import generated.systems.Systems
 import generated.systems.injectSys
-import ktx.log.logger
 import warped.realms.WarpedRealms
 import warped.realms.event.MapChangeEvent
+import warped.realms.system.CollisionSpawnSystem
 import warped.realms.system.update.CameraSystem
-import warped.realms.system.EventSystem
 import warped.realms.system.Logger
 import warped.realms.system.update.RenderSystem
 import warped.realms.system.SpawnSystem
@@ -25,7 +24,8 @@ class Screen(game: WarpedRealms): AScreen(game) {
         titledMap,
         injectSys<RenderSystem>(),
         injectSys<SpawnSystem>(),
-        injectSys<CameraSystem>()
+        injectSys<CameraSystem>(),
+        injectSys<CollisionSpawnSystem>()
     )
     override fun show() {
         super.show()

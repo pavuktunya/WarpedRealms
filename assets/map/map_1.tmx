@@ -1,15 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="24" tileheight="24" infinite="0" nextlayerid="7" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="24" tileheight="24" infinite="0" nextlayerid="7" nextobjectid="7">
  <tileset firstgid="1" name="map" tilewidth="24" tileheight="24" spacing="4" margin="2" tilecount="1296" columns="36">
   <image source="../graphics/background/map.png" width="1024" height="1024"/>
+  <tile id="0">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="14.0254" y="13.677"/>
+   </objectgroup>
+  </tile>
+  <tile id="1">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="13.9383" y="13.8512"/>
+   </objectgroup>
+  </tile>
+  <tile id="2">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="13.3285" y="13.5027"/>
+   </objectgroup>
+  </tile>
+  <tile id="3">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.22323" y="3.22323" width="20.9946" height="20.6461"/>
+   </objectgroup>
+  </tile>
+  <tile id="4">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="13.7641" y="13.2414"/>
+   </objectgroup>
+  </tile>
+  <tile id="7">
+   <objectgroup draworder="index" id="3">
+    <object id="4" x="3.6588" y="3.39746" width="19.6007" height="10.1924"/>
+   </objectgroup>
+  </tile>
+  <tile id="8">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.74592" y="4.09437" width="20.2105" height="9.49546"/>
+   </objectgroup>
+  </tile>
+  <tile id="23">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="2.96189" y="3.22323" width="20.7332" height="10.5408"/>
+   </objectgroup>
+  </tile>
+  <tile id="24">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.049" y="3.39746" width="20.4719" height="10.2795"/>
+   </objectgroup>
+  </tile>
+  <tile id="113">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.13612" y="3.13612" width="20.8203" height="11.412"/>
+   </objectgroup>
+  </tile>
+  <tile id="403">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.48457" y="3.74592" width="19.775" height="9.14701"/>
+   </objectgroup>
+  </tile>
+  <tile id="404">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.48457" y="3.74592" width="20.1234" height="9.66969"/>
+   </objectgroup>
+  </tile>
+  <tile id="405">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.31034" y="3.74592" width="19.9492" height="9.75681"/>
+   </objectgroup>
+  </tile>
+  <tile id="406">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.22323" y="3.48457" width="20.6461" height="10.5408"/>
+   </objectgroup>
+  </tile>
+  <tile id="434">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.22323" y="3.39746" width="20.3848" height="10.6279"/>
+   </objectgroup>
+  </tile>
+  <tile id="435">
+   <objectgroup draworder="index" id="2">
+    <object id="1" x="3.57169" y="3.13612" width="18.7296" height="10.5408"/>
+   </objectgroup>
+  </tile>
  </tileset>
- <tileset firstgid="1297" name="entities" tilewidth="162" tileheight="162" tilecount="2" columns="0">
+ <tileset firstgid="1297" name="entities" tilewidth="162" tileheight="162" tilecount="3" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0" type="player">
    <image width="162" height="162" source="../graphics/entities/fantazy_warrior.png"/>
   </tile>
   <tile id="1" type="rat">
    <image width="64" height="64" source="../graphics/entities/rat.png"/>
+  </tile>
+  <tile id="2">
+   <image width="23" height="23" source="../graphics/entities/chest.png"/>
   </tile>
  </tileset>
  <layer id="2" name="bgd_1" width="30" height="20">

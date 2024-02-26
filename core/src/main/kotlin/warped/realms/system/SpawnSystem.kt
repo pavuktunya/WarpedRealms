@@ -17,6 +17,7 @@ import warped.realms.event.MapChangeEvent
 import warped.realms.screen.Screen.Companion.UNIT_SCALE
 import System
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.utils.Scaling
 import generated.systems.injectSys
@@ -52,14 +53,25 @@ class SpawnSystem : IHandleEvent {
         }.also {
             Logger.debug { "Player has spawned with size: ${size(AnimationModel.FANTAZY_WARRIOR)}!" }
         }
-
         entityType.RAT -> createEntity(
             AnimationModel.RAT,
             posX,
             posY,
             size(AnimationModel.RAT),
-            5f
+            5f,
+            physicScaling = vec2(0.3f, 0.3f),
+            physicOffset = vec2(0f, -2f * UNIT_SCALE)
         ).also { Logger.debug { "Enemy has spawned with size: ${size(AnimationModel.RAT)}!" } }
+//        entityType.CHEST -> createEntity(
+//            AnimationModel.CHEST,
+//            posX,
+//            posY,
+//            size(AnimationModel.CHEST),
+//            5f,
+//            physicScaling = vec2(0.3f, 0.3f),
+//            physicOffset = vec2(0f, -2f* UNIT_SCALE),
+//            BodyType.StaticBody
+//        )
     }
     override fun handle(event: Event): Boolean {
         when(event){
@@ -101,6 +113,7 @@ class SpawnSystem : IHandleEvent {
         speed: Float,
         physicScaling: Vector2 = vec2(1f, 1f),
         physicOffset: Vector2 = vec2(0f, 0f),
+        bodyType: BodyType = BodyType.DynamicBody,
         width: Float = 1f * size.x,
         height: Float = 1f * size.y,
     ): GameEntity {
@@ -118,6 +131,10 @@ class SpawnSystem : IHandleEvent {
                 setScaling(Scaling.fill)
             }
         )
+        val clCmp: (() -> CollisionComponent)? = when (bodyType) {
+            BodyType.StaticBody -> { -> CollisionComponent() }
+            else -> null
+        }
         return GameEntity(
             {
                 image
@@ -134,15 +151,27 @@ class SpawnSystem : IHandleEvent {
                 physicCmpFromImage(
                     phWorld,
                     image.image,
-                    BodyDef.BodyType.DynamicBody
+                    bodyType
                 ) { phCmp, width, height ->
-                    box(width, height) {
-                        isSensor = false
+                    val w = width * physicScaling.x
+                    val h = height * physicScaling.y
+                    //hit box
+                    box(w, h, physicOffset) {
+                        isSensor = bodyType != BodyType.StaticBody
+                    }
+                    if (bodyType != BodyType.StaticBody) {
+                        //collision box
+                        val collH = h * 0.4f
+                        val collOffset = vec2().apply { set(physicOffset) }
+                        collOffset.y -= h * 0.5f - collH * 0.5f
+                        //box(w,collH,collOffset)
+                        box(w, collH, physicOffset)
                     }
                 }.apply { this.body!!.userData = this }
             }, {
                 MoveComponent(speed)
-            }
+            },
+            clCmp
         )
     }
 

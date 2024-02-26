@@ -358,6 +358,9 @@ class Output(
 
 //
             writer.appendLine("inline fun Entity.initEntity(){")
+            writer.appendLine("//    this.cmps.forEach { t, u ->")
+            writer.appendLine("//        Factories.delete(u)")
+            writer.appendLine("//    }")
             writer.appendLine("    Factories.put(this.cmps)")
             writer.appendLine("}\n")
 ///

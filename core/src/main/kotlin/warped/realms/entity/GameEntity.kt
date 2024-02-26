@@ -8,7 +8,8 @@ class GameEntity(
     anCmp: () -> AnimationComponent,
     trCmp: () -> TransformComponent,
     phCmp: () -> PhysicComponent,
-    mvCmp: () -> MoveComponent
+    mvCmp: () -> MoveComponent,
+    clCmp: (() -> CollisionComponent)?
 ) : Entity() {
     init {
         addCmp<AnimationComponent> { anCmp.invoke() }
@@ -16,7 +17,14 @@ class GameEntity(
         addCmp<MoveComponent> { mvCmp.invoke() }
         addCmp<PhysicComponent> { phCmp.invoke() }
         addCmp<TransformComponent> { trCmp.invoke() }
+        if (clCmp != null) {
+            addCmp<CollisionComponent> { clCmp.invoke() }
+        }
+        initEntity()
+    }
 
+    fun addCollisionComponent(lambda: () -> CollisionComponent) {
+        addCmp<CollisionComponent> { lambda.invoke() }
         initEntity()
     }
 }
