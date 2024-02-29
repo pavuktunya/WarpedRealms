@@ -6,6 +6,7 @@ import generated.systems.injectSys
 import ktx.log.logger
 import warped.realms.WarpedRealms
 import warped.realms.event.MapChangeEvent
+import warped.realms.server.request.ServerRequest
 import warped.realms.system.update.CameraSystem
 import warped.realms.system.EventSystem
 import warped.realms.system.Logger
@@ -14,11 +15,12 @@ import warped.realms.system.SpawnSystem
 import warped.realms.system.debug
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    //    private val serverHandler = Server()
+//    private val serverHandler = Server()
 //    private val server = TestServer(
 //        serverHandler.serverRequest.serverQueue,
 //        serverHandler.serverRequest.clientQueue
 //    )
+    private val serverRequest = ServerRequest()
     private val titledMap = TmxMapLoader().load("map/map_1.tmx")
     private val systems = Systems
     private val mapChangeEvent = MapChangeEvent(

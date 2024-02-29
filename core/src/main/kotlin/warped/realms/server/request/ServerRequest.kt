@@ -1,19 +1,21 @@
 package warped.realms.server.request
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import ktx.log.logger
+import warped.realms.server.request.getter.GetterRequest
+import warped.realms.server.request.setter.SetterRequest
+import warped.realms.test.queue.ThreadSafeQueue
+import java.lang.Thread.sleep
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.io.readText
 
-class ServerRequest() {
-//    val serverQueue: ServerQueue = ServerQueue()
-//    val clientQueue: ServerQueue = ServerQueue()
+class ServerRequest {
+    //get & send clients
     private val gotClient = HttpClient{
         install(WebSockets)
     }
@@ -21,53 +23,65 @@ class ServerRequest() {
         install(WebSockets)
     }
 
-//    private val setterRequest: ISetRequest = SetterRequest(clientQueue)
-//    private val getterRequest: IGetRequest = GetterRequest(serverQueue)
+    //get & send queues
+    private val serverQueue: ThreadSafeQueue = ThreadSafeQueue()
+    private val clientQueue: ThreadSafeQueue = ThreadSafeQueue()
+//    private val setterRequest: SetterRequest = SetterRequest(clientQueue)
+//    private val getterRequest: GetterRequest = GetterRequest(serverQueue)
 
     private val lock = ReentrantLock()
 
-    private val got = Thread {
+    private val all_in = Thread {
         runBlocking {
-            val objectMapper = jacksonObjectMapper()
-            gotClient.webSocket(method = HttpMethod.Get, port = 8080, host = "0.0.0.0", path = "/connection") {
-                for (frame in incoming) {
-                    frame as? Frame.Binary ?: continue
-                    val someData = objectMapper.readValue<SomeData>(frame.readBytes())
-                    println(someData)
-                    delay(250L)
-                }
+            var jwt: String? = null
+            val objectMapper = warped.realms.server.request.ObjectMapper()
+            val client = HttpClient{
+                install(WebSockets)
             }
-        }
-    }
-    private val send = Thread {
-        runBlocking {
-            val someData = SomeData("sdsadkasdhasdjashdasd", 4324, 12321)
-            val objectMapper = jacksonObjectMapper()
-            sendClient.webSocket(method = HttpMethod.Put, port = 8080, host = "0.0.0.0", path = "/connection") {
-                while (true) {
-                    val someDataBinary = objectMapper.writeValueAsBytes(someData)
-                    send(Frame.Binary(true, someDataBinary))
-                    delay(250L)
+            val auth = Auth("username", "password")
+            client.webSocket (method = HttpMethod.Get, port = 8080, host = "0.0.0.0", path = "/auth") {
+                send(Frame.Binary(true, objectMapper.init.writeValueAsBytes(auth)))
+                for (frame in incoming) {
+                    frame as? Frame.Text ?: continue
+                    if ("[RIGHT DATA SENT]" == frame.readText()) {
+                        val tokenFrame = incoming.receive() as? Frame.Text ?: throw Exception()
+                        jwt = tokenFrame.readText()
+                        break
+                    }
+                }
+                this.close()
+                if (jwt != null) {
+                    client.webSocket (method = HttpMethod.Get, port = 8080, host = "0.0.0.0", path = "/connection") {
+                        send(Frame.Text(jwt!!))
+                        for (frame in incoming) {
+                            frame as? Frame.Text ?: continue
+                            println(frame.readText())
+                        }
+                    }
                 }
             }
         }
     }
 
+    //connect with server
     init {
         lock.lock()
-
-        got.start()
-        send.start()
+        all_in.start()
+        //get.start()
+        //send.start()
     }
 
+    //turn off sever connection
     fun dispose() {
+        all_in.join()
         lock.unlock()
         //serverQueue.stackEmptyCondition.signalAll()
-        got.join()
+        //get.join()
         //clientQueue.stackFullCondition.signalAll()
-        send.join()
+        //send.join()
     }
 
+    //hz logger?
     companion object {
         val log = logger<ServerRequest>()
     }

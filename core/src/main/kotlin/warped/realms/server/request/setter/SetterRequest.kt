@@ -1,12 +1,9 @@
 package warped.realms.server.request.setter
 
-import warped.realms.server.request.getter.IGetRequest
-import warped.realms.test.queue.ServerQueue
-import java.sql.Time
-import kotlin.system.measureTimeMillis
+import warped.realms.test.queue.ThreadSafeQueue
 
 class SetterRequest(
-    val queue: ServerQueue
+    private val queue: ThreadSafeQueue
 ) : ISetRequest {
     override fun sendData(data: Int) {
         queue.push(data)
