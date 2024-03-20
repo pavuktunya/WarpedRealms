@@ -5,5 +5,4 @@ import warped.realms.WarpedRealms
 
 abstract class AScreen(
     val game: WarpedRealms
-): KtxScreen {
-}
+): KtxScreen

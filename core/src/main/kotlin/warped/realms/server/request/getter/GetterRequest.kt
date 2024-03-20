@@ -1,12 +1,12 @@
 package warped.realms.server.request.getter
 
-import warped.realms.test.queue.ServerQueue
+import warped.realms.test.queue.ThreadSafeQueue
 
 class GetterRequest(
-    val queue: ServerQueue
+    private val queue: ThreadSafeQueue
 ) : IGetRequest {
-    var d: Int = 0
-    override fun getData(): Int {
+    private var d: Int? = 0
+    override fun getData(): Int? {
         d = queue.pop()
         println("[CLIENT] Get $d + ${java.time.LocalTime.now()}")
         return d
