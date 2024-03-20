@@ -27,9 +27,10 @@ class ServerRequest() {
 
     val lock = ReentrantLock()
 
-    val got = Thread {
-
-    }
+    //
+//    val got = Thread {
+//
+//    }
     val send = Thread {
         runBlocking{
             client.webSocket(HttpMethod.Get, host = "127.0.0.1", port = 8000, path = "/gate") {
