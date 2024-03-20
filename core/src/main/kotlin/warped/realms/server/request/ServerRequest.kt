@@ -29,7 +29,7 @@ class ServerRequest() {
 
     //
 //    val got = Thread {
-//
+//    руддщ цщкдв
 //    }
     val send = Thread {
         runBlocking{
