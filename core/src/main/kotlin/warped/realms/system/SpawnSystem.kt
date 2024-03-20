@@ -131,8 +131,8 @@ class SpawnSystem : IHandleEvent {
                 setScaling(Scaling.fill)
             }
         )
-        val clCmp: (() -> CollisionComponent)? = when (bodyType) {
-            BodyType.StaticBody -> { -> CollisionComponent() }
+        val clCmp: (() -> TiledComponent)? = when (bodyType) {
+            BodyType.StaticBody -> { -> TiledComponent() }
             else -> null
         }
         return GameEntity(

@@ -5,19 +5,22 @@ import generated.systems.Systems
 import generated.systems.injectSys
 import warped.realms.WarpedRealms
 import warped.realms.event.MapChangeEvent
-import warped.realms.system.CollisionSpawnSystem
+import warped.realms.server.Server
+import warped.realms.system.update.CollisionSpawnSystem
 import warped.realms.system.update.CameraSystem
 import warped.realms.system.Logger
 import warped.realms.system.update.RenderSystem
 import warped.realms.system.SpawnSystem
 import warped.realms.system.debug
+import warped.realms.test.server.TestServer
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    //    private val serverHandler = Server()
-//    private val server = TestServer(
-//        serverHandler.serverRequest.serverQueue,
-//        serverHandler.serverRequest.clientQueue
-//    )
+    private val serverHandler = Server()
+    private val server = TestServer(
+        serverHandler.serverRequest.serverQueue,
+        serverHandler.serverRequest.clientQueue
+    )
+
     private val titledMap = TmxMapLoader().load("map/map_1.tmx")
     private val systems = Systems
     private val mapChangeEvent = MapChangeEvent(

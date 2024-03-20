@@ -8,4 +8,5 @@ import warped.realms.entity.GameEntity
 class TiledComponent {
     lateinit var cell: TiledMapTileLayer.Cell
     val nearbyEntities = mutableSetOf<TiledComponent>()
+    var isActive: Boolean = false
 }

@@ -2,7 +2,6 @@ package warped.realms.system.update
 
 import PutComponent
 import com.badlogic.gdx.math.MathUtils
-import ktx.log.logger
 import ktx.math.component1
 import ktx.math.component2
 import warped.realms.component.ImageComponent
@@ -12,12 +11,8 @@ import Update
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.createWorld
 import ktx.math.vec2
-import warped.realms.component.CollisionComponent
 import warped.realms.component.TiledComponent
-import warped.realms.entity.Entity
-import warped.realms.entity.GameEntity
 import warped.realms.system.Logger
-import warped.realms.system.debug
 import warped.realms.system.error
 
 @System
@@ -26,7 +21,6 @@ import warped.realms.system.error
 class PhysicSystem : ContactListener {
     private val physCmps: MutableMap<PhysicComponent, ImageComponent> = mutableMapOf()
     private val tiledCmps = mutableMapOf<PhysicComponent, TiledComponent>()
-    private val collCmps = mutableMapOf<PhysicComponent, CollisionComponent>()
 
     init {
         phWorld.setContactListener(this)
@@ -100,12 +94,12 @@ class PhysicSystem : ContactListener {
         get() = this.body.userData as PhysicComponent
 
     override fun beginContact(contact: Contact) {
-        val entityA: PhysicComponent = contact.fixtureA.entity
-        val entityB: PhysicComponent = contact.fixtureB.entity
-        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
-        val isEntityBTiledCollisionFixture = entityB in collCmps && !contact.fixtureB.isSensor
-        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
-        val isEntityATiledCollisionFixture = entityA in collCmps && !contact.fixtureA.isSensor
+//        val entityA: PhysicComponent = contact.fixtureA.entity
+//        val entityB: PhysicComponent = contact.fixtureB.entity
+//        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
+//        val isEntityBTiledCollisionFixture = entityB in collCmps && !contact.fixtureB.isSensor
+//        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
+//        val isEntityATiledCollisionFixture = entityA in collCmps && !contact.fixtureA.isSensor
         when {
 //            isEntityATiledCollisionSensor && isEntityBTiledCollisionFixture -> {
 //                tiledCmps[entityA].nearbyEntities += entityB
@@ -117,10 +111,10 @@ class PhysicSystem : ContactListener {
     }
 
     override fun endContact(contact: Contact) {
-        val entityA: PhysicComponent = contact.fixtureA.entity
-        val entityB: PhysicComponent = contact.fixtureB.entity
-        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
-        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
+//        val entityA: PhysicComponent = contact.fixtureA.entity
+//        val entityB: PhysicComponent = contact.fixtureB.entity
+//        val isEntityATiledCollisionSensor = entityA in tiledCmps && contact.fixtureA.isSensor
+//        val isEntityBTiledCollisionSensor = entityB in tiledCmps && contact.fixtureB.isSensor
         when {
 //            isEntityATiledCollisionSensor && !contact.fixtureB.isSensor{
 //                tiledCmps[entityA].nearbyEntities -= entityB

@@ -1,4 +1,4 @@
-package warped.realms.system
+package warped.realms.system.update
 
 import PutComponent
 import System
@@ -27,7 +27,8 @@ import warped.realms.event.Event
 import warped.realms.event.IHandleEvent
 import warped.realms.event.MapChangeEvent
 import warped.realms.screen.Screen.Companion.UNIT_SCALE
-import warped.realms.system.update.PhysicSystem
+import warped.realms.system.Logger
+import warped.realms.system.debug
 import kotlin.math.max
 
 @System
@@ -38,7 +39,7 @@ class CollisionSpawnSystem : IHandleEvent {
     private val tiledMapLayers = GdxArray<TiledMapTileLayer>()
     private val physicCmps = mutableMapOf<PhysicComponent, TiledComponent>()
     private val processedCell = mutableSetOf<Cell>()
-    fun PutComponent(physCmp: PhysicComponent, tileCmp: TiledComponent) {
+    fun PutComponent(tileCmp: TiledComponent, physCmp: PhysicComponent) {
         physicCmps[physCmp] = tileCmp
         val (entityX, entityY) = physCmp.body!!.position
         tiledMapLayers.forEach { layer ->
@@ -62,7 +63,6 @@ class CollisionSpawnSystem : IHandleEvent {
             }
         }
     }
-
     fun Update(delta: Float) {
         physicCmps.forEach { physCmp, collCmp ->
             val (entityX, entityY) = physCmp.body!!.position
@@ -88,17 +88,14 @@ class CollisionSpawnSystem : IHandleEvent {
             }
         }
     }
-
     fun DeleteComponent(component: PhysicComponent) {
         physicCmps.remove(component)
     }
-
     fun DeleteComponent(component: TiledComponent) {
         physicCmps.filterValues { it == component }?.keys?.forEach {
             physicCmps.remove(it)
         }
     }
-
     private fun TiledMapTileLayer.forEachCell(
         startX: Int,
         startY: Int,
@@ -111,7 +108,6 @@ class CollisionSpawnSystem : IHandleEvent {
             }
         }
     }
-
     override fun handle(event: Event): Boolean {
         when (event) {
             is MapChangeEvent -> {
@@ -143,7 +139,6 @@ class CollisionSpawnSystem : IHandleEvent {
         }
         return false
     }
-
     private fun createCollision(
         x: Int,
         y: Int,
@@ -173,7 +168,6 @@ class CollisionSpawnSystem : IHandleEvent {
                     })
                 }
             }
-
             is Polyline -> {
                 val x = shape.x
                 val y = shape.y
@@ -187,11 +181,9 @@ class CollisionSpawnSystem : IHandleEvent {
                     })
                 }
             }
-
             else -> error("No such shape in CollisionSpawnSystem")
         }
     }
-
     fun createPhysCmp(
         bodyX: Float,
         bodyY: Float,
@@ -215,11 +207,9 @@ class CollisionSpawnSystem : IHandleEvent {
             })
         }
     }
-
     fun Dispose() {
 
     }
-
     companion object {
         const val SPAWN_AREA_SIZE = 3
     }
