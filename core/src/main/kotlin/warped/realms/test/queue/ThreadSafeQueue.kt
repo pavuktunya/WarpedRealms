@@ -1,18 +1,17 @@
 package warped.realms.test.queue
 
+import java.util.concurrent.locks.Condition
 import java.util.concurrent.locks.ReentrantLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 
-class ServerQueue() {
-    //val lock = ReentrantReadWriteLock()
-    //val writeLock = lock.writeLock()
-    val lock: ReentrantLock = ReentrantLock()
+//thread-safe queue
+class ThreadSafeQueue {
+    private val lock: ReentrantLock = ReentrantLock()
 
-    val queue = mutableListOf<Int>()
-    val capacity = 2
+    private val queue = mutableListOf<Int>()
+    private val capacity = 200
 
-    val stackEmptyCondition = lock.newCondition()
-    val stackFullCondition = lock.newCondition()
+    private val stackEmptyCondition: Condition = lock.newCondition()
+    private val stackFullCondition: Condition = lock.newCondition()
 
     fun push(num: Int) {
         lock.lock()
@@ -29,22 +28,23 @@ class ServerQueue() {
         }
     }
 
-    fun pop(): Int {
+    fun pop(): Int? {
         lock.lock()
-        var t = 0
+        //some data
+        var data: Int? = null
         try {
             if (queue.size == 0) {
                 stackEmptyCondition.await()
             }
             if (queue.size != 0) {
-                t = queue.last()
+                data = queue.last()
                 queue.removeLast()
-
                 stackFullCondition.signalAll()
+
             }
         } finally {
             lock.unlock()
         }
-        return t
+        return data
     }
 }
