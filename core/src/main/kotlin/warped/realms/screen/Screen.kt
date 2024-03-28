@@ -5,14 +5,14 @@ import generated.systems.Systems
 import generated.systems.injectSys
 import warped.realms.WarpedRealms
 import warped.realms.event.MapChangeEvent
-import warped.realms.server.Server
+import org.example.Server
 import warped.realms.system.update.CollisionSpawnSystem
 import warped.realms.system.update.CameraSystem
 import warped.realms.system.Logger
 import warped.realms.system.update.RenderSystem
 import warped.realms.system.SpawnSystem
 import warped.realms.system.debug
-import warped.realms.test.server.TestServer
+import org.example.test.server.TestServer
 
 class Screen(game: WarpedRealms): AScreen(game) {
     private val serverHandler = Server()

@@ -9,7 +9,6 @@ buildscript {
   }
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-
   }
 }
 
@@ -32,6 +31,22 @@ configure(subprojects) {
 }
 
 subprojects {
+  // Загрузить свойства из файла gradle.properties
+  ext.loadProperties = {
+    def propertiesFile = rootProject.file('gradle.properties')
+    if (propertiesFile.exists()) {
+      println "Loading properties from ${propertiesFile}"
+      def properties = new Properties()
+      properties.load(propertiesFile.newDataInputStream())
+      properties.each { key, value ->
+        project.ext.set(key, value)
+      }
+    }
+  }
+
+  // Вызвать функцию загрузки свойств
+  loadProperties()
+
   version = '1.0.0'
   ext.appName = 'WarpedRealmsLootLabyrinth'
   repositories {
