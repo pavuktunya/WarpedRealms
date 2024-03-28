@@ -1,6 +1,6 @@
-package org.example.request.getter
+package server_builder.request.getter
 
-import org.example.test.queue.ServerQueue
+import server_builder.queue.ServerQueue
 
 class GetterRequest(
     val queue: ServerQueue

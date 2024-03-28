@@ -1,4 +1,4 @@
-package org.example.request.getter
+package server_builder.request.getter
 
 interface IGetRequest {
     fun getData(): Int

@@ -1,4 +1,4 @@
-package org.example.gamelogic.system
+package server_logic.system
 
 open class ServerIteratingSystem(val interval: Interval = EachFrame()) {
     var accumulator: Float = 0f

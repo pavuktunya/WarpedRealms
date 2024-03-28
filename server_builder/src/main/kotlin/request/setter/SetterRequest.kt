@@ -1,6 +1,6 @@
-package org.example.request.setter
+package server_builder.request.setter
 
-import org.example.test.queue.ServerQueue
+import server_builder.queue.ServerQueue
 
 class SetterRequest(
     val queue: ServerQueue

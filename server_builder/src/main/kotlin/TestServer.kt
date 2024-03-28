@@ -1,7 +1,8 @@
-package org.example
+package server_builder
 
-import org.example.gamelogic.ServerGameLogic
-import org.example.request.ClientRequest
+import server_builder.queue.ServerQueue
+import server_builder.request.ClientRequest
+import server_logic.ServerGameLogic
 import java.lang.Thread.sleep
 import java.util.concurrent.locks.ReentrantLock
 

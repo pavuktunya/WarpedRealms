@@ -1,4 +1,4 @@
-package org.example.handler
+package server_builder.handler
 
 class ServerHandler {
 }

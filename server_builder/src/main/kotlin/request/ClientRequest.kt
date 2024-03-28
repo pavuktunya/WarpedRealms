@@ -1,10 +1,10 @@
-package org.example.request
+package server_builder.request
 
-import org.example.test.queue.ServerQueue
-import org.example.request.getter.GetterRequest
-import org.example.request.getter.IGetRequest
-import org.example.request.setter.ISetRequest
-import org.example.request.setter.SetterRequest
+import server_builder.queue.ServerQueue
+import server_builder.request.getter.GetterRequest
+import server_builder.request.getter.IGetRequest
+import server_builder.request.setter.ISetRequest
+import server_builder.request.setter.SetterRequest
 import java.util.concurrent.locks.ReentrantLock
 
 class ClientRequest(serverQueue: ServerQueue, clientQueue: ServerQueue, val lock: ReentrantLock) {
