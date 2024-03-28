@@ -1,6 +1,6 @@
 package server_connector.setter
 
-import server_connector.test.queue.ServerQueue
+import server_connector.queue.ServerQueue
 
 class SetterRequest(
     val queue: ServerQueue

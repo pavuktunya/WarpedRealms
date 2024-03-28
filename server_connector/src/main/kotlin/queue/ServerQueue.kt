@@ -1,7 +1,6 @@
-package server_connector.test.queue
+package server_connector.queue
 
 import java.util.concurrent.locks.ReentrantLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 
 class ServerQueue() {
     //val lock = ReentrantReadWriteLock()

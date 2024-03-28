@@ -1,6 +1,6 @@
 package server_connector.getter
 
-import server_connector.test.queue.ServerQueue
+import server_connector.queue.ServerQueue
 
 class GetterRequest(
     val queue: ServerQueue

@@ -7,7 +7,7 @@ import server_builder.request.setter.ISetRequest
 import server_builder.request.setter.SetterRequest
 import java.util.concurrent.locks.ReentrantLock
 
-class ClientRequest(serverQueue: ServerQueue, clientQueue: ServerQueue, val lock: ReentrantLock) {
+class ServerRequest(serverQueue: ServerQueue, clientQueue: ServerQueue, val lock: ReentrantLock) {
     private val setterRequest: ISetRequest = SetterRequest(serverQueue)
     private val getterRequest: IGetRequest = GetterRequest(clientQueue)
 

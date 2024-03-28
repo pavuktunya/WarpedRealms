@@ -1,4 +1,4 @@
-package server_connector
+package server_connector.request
 
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
@@ -7,7 +7,7 @@ import server_connector.getter.GetterRequest
 import server_connector.getter.IGetRequest
 import server_connector.setter.ISetRequest
 import server_connector.setter.SetterRequest
-import server_connector.test.queue.ServerQueue
+import server_connector.queue.ServerQueue
 import java.util.concurrent.locks.ReentrantLock
 
 class ServerRequest() {

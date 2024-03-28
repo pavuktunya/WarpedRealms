@@ -3,6 +3,7 @@ package warped.realms.screen
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import generated.systems.Systems
 import generated.systems.injectSys
+import server_connector.ServerConnector
 import warped.realms.WarpedRealms
 import warped.realms.event.MapChangeEvent
 import warped.realms.system.update.CollisionSpawnSystem
@@ -13,12 +14,6 @@ import warped.realms.system.SpawnSystem
 import warped.realms.system.debug
 
 class Screen(game: WarpedRealms): AScreen(game) {
-    //private val serverHandler = Server()
-//    private val server = TestServer(
-//        serverHandler.serverRequest.serverQueue,
-//        serverHandler.serverRequest.clientQueue
-//    )
-
     private val titledMap = TmxMapLoader().load("map/map_1.tmx")
     private val systems = Systems
     private val mapChangeEvent = MapChangeEvent(

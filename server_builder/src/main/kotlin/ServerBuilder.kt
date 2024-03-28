@@ -1,13 +1,13 @@
 package server_builder
 
 import server_builder.queue.ServerQueue
-import server_builder.request.ClientRequest
+import server_builder.request.ServerRequest
 import server_logic.ServerGameLogic
 import java.lang.Thread.sleep
 import java.util.concurrent.locks.ReentrantLock
 
 //Сборка сервера, методы подключения к нему
-class TestServer(serverQueue: ServerQueue, clientQueue: ServerQueue) {
+class ServerBuilder() {
     val lock = ReentrantLock()
 
     private val t0: Thread = Thread {
@@ -27,7 +27,7 @@ class TestServer(serverQueue: ServerQueue, clientQueue: ServerQueue) {
 
     init {
         lock.lock()
-
+        println("Server Builder")
         //t0.start()
         //t1.start()
     }
@@ -46,8 +46,8 @@ class Request(
     val clientQueue: ServerQueue,
     val lock: ReentrantLock
 ) : Thread() {
-    lateinit var clientRequest: ClientRequest
+    lateinit var clientRequest: ServerRequest
     override fun run() {
-        clientRequest = ClientRequest(serverQueue, clientQueue, lock)
+        clientRequest = ServerRequest(serverQueue, clientQueue, lock)
     }
 }
