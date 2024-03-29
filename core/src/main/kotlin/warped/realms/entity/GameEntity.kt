@@ -4,27 +4,27 @@ import generated.systems.initEntity
 import warped.realms.component.*
 
 class GameEntity(
-    imCmp: () -> ImageComponent,
-    anCmp: () -> AnimationComponent,
-    trCmp: () -> TransformComponent,
-    phCmp: () -> PhysicComponent,
-    mvCmp: () -> MoveComponent,
-    tileCmp: (() -> TiledComponent)?
+    imCmp: ImageComponent.() -> ImageComponent,
+    anCmp: AnimationComponent.() -> AnimationComponent,
+    trCmp: TransformComponent.() -> TransformComponent,
+    phCmp: PhysicComponent.() -> PhysicComponent,
+    mvCmp: MoveComponent.() -> MoveComponent,
+    tileCmp: (TiledComponent.() -> TiledComponent)?
 ) : Entity() {
     init {
-        addCmp<AnimationComponent> { anCmp.invoke() }
-        addCmp<ImageComponent> { imCmp.invoke() }
-        addCmp<MoveComponent> { mvCmp.invoke() }
-        addCmp<PhysicComponent> { phCmp.invoke() }
-        addCmp<TransformComponent> { trCmp.invoke() }
+        addCmp<AnimationComponent>(anCmp)
+        addCmp<ImageComponent>(imCmp)
+        addCmp<MoveComponent>(mvCmp)
+        addCmp<PhysicComponent>(phCmp)
+        addCmp<TransformComponent>(trCmp)
         if (tileCmp != null) {
-            addCmp<TiledComponent> { tileCmp.invoke() }
+            addCmp<TiledComponent>(tileCmp)
         }
         initEntity()
     }
 
-    fun addCollisionComponent(lambda: () -> TiledComponent) {
-        addCmp<TiledComponent> { lambda.invoke() }
+    fun addCollisionComponent(lambda: TiledComponent.() -> TiledComponent) {
+        addCmp<TiledComponent>(lambda)
         initEntity()
     }
 }

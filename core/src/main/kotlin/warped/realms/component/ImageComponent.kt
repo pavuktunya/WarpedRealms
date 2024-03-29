@@ -5,7 +5,7 @@ import Component
 
 @Component
 class ImageComponent(
-    val image: Image
+    var image: Image
 ):Comparable<ImageComponent> {
     override fun compareTo(other: ImageComponent): Int {
         val yDiff = other.image.y.compareTo(image.y)

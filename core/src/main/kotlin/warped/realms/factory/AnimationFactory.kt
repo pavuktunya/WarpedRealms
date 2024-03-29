@@ -8,8 +8,8 @@ import kotlin.reflect.KClass
 
 @Factory(AnimationComponent::class)
 class AnimationFactory {
-    fun Factory(lambda: () -> AnimationComponent): AnimationComponent {
-        return lambda.invoke()
+    fun Factory(lambda: AnimationComponent.() -> AnimationComponent): AnimationComponent {
+        return AnimationComponent().lambda()
     }
 
     fun Delete(cmp: AnimationComponent) {

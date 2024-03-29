@@ -16,6 +16,8 @@ import warped.realms.system.debug
 class Screen(game: WarpedRealms): AScreen(game) {
     private val titledMap = TmxMapLoader().load("map/map_1.tmx")
     private val systems = Systems
+    //private val serverConnector = game.s
+
     private val mapChangeEvent = MapChangeEvent(
         titledMap,
         injectSys<RenderSystem>(),

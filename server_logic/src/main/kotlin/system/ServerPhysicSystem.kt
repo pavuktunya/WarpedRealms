@@ -3,16 +3,16 @@ package server_logic.system
 import com.badlogic.gdx.physics.box2d.World
 import ktx.log.logger
 import org.example.component.ServerPhysicComponent
-import server_logic.component.ImageComponent
+import server_logic.component.ServerImageComponent
 
 class ServerPhysicSystem(
     private val phWorld: World,
-    vararg physCmps: Pair<ServerPhysicComponent, ImageComponent>
+    vararg physCmps: Pair<ServerPhysicComponent, ServerImageComponent>
 ) : ServerIteratingSystem(interval = Fixed(1 / 60f)) {
-    private val physCmps: MutableMap<ServerPhysicComponent, ImageComponent> = mutableMapOf(*physCmps)
+    private val physCmps: MutableMap<ServerPhysicComponent, ServerImageComponent> = mutableMapOf(*physCmps)
 
 
-    fun addPhysicComponent(vararg _physCmps: Pair<ServerPhysicComponent, ImageComponent>) {
+    fun addPhysicComponent(vararg _physCmps: Pair<ServerPhysicComponent, ServerImageComponent>) {
         physCmps.putAll(mutableMapOf(*_physCmps).also {
             it.forEach { physicCmp, imageCmp ->
                 val vect = physicCmp.body.position

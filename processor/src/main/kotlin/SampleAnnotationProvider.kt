@@ -331,7 +331,7 @@ class Output(
             //writer.appendLine("public val ${scan_root.simpleName}.factories")
             //writer.appendLine("    get() = Factories\n")
 
-            writer.appendLine("inline fun <reified T> createCmp(noinline lambda: ()-> T): T{")
+            writer.appendLine("inline fun <reified T> createCmp(noinline lambda: T.()-> T): T{")
             writer.appendLine("    val factory = injectFac<T>()")
             writer.appendLine("    val cmp = when(factory){")
 
@@ -341,7 +341,7 @@ class Output(
                 writer.appendLine("            when(T::class){")
                 val components = processed_component_factory.filter { it.value == factories[i - 1] }
                 components.forEach {
-                    writer.appendLine("                ${it.key.simpleName}::class -> Factories.factory${i}.Factory(lambda as (()-> ${it.key.simpleName}))")
+                    writer.appendLine("                ${it.key.simpleName}::class -> Factories.factory${i}.Factory(lambda as (${it.key.simpleName}.()-> ${it.key.simpleName}))")
                 }
                 writer.appendLine("                else -> error(\"No such components for factory \${T::class}\")")
                 writer.appendLine("            }")

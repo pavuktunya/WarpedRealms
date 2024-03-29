@@ -23,7 +23,7 @@ class MoveSystem {
 //        println("[UPDATE] ${this::class.simpleName} $x")
         moveCmps.forEach { moveCmp, physCmp ->
             val mass = physCmp.body!!.mass
-            val (velX, velY) = physCmp.body.linearVelocity
+            val (velX, velY) = physCmp.body!!.linearVelocity
             if (moveCmp.cos == 0f && moveCmp.sin == 0f) {
                 physCmp.impulse.set(
                     mass * (0f - velX),

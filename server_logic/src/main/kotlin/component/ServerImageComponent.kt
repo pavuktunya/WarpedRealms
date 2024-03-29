@@ -2,10 +2,10 @@ package server_logic.component
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 
-class ImageComponent(
+class ServerImageComponent(
     val image: Image
-) : Comparable<ImageComponent> {
-    override fun compareTo(other: ImageComponent): Int {
+) : Comparable<ServerImageComponent> {
+    override fun compareTo(other: ServerImageComponent): Int {
         val yDiff = other.image.y.compareTo(image.y)
         return if (yDiff != 0) {
             yDiff

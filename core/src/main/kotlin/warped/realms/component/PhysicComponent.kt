@@ -12,7 +12,7 @@ import Component
 
 @Component
 class PhysicComponent(
-    val body: Body? = null
+    var body: Body? = null
 ) {
     val prevPos = vec2()
     val impulse = vec2()

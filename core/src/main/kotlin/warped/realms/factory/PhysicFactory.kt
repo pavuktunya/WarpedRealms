@@ -7,8 +7,8 @@ import kotlin.reflect.KClass
 
 @Factory(PhysicComponent::class)
 class PhysicFactory {
-    fun Factory(lambda: () -> PhysicComponent): PhysicComponent {
-        return lambda.invoke()
+    fun Factory(lambda: PhysicComponent.() -> PhysicComponent): PhysicComponent {
+        return PhysicComponent().lambda()
     }
 
     fun Delete(cmp: PhysicComponent) {

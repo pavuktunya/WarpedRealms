@@ -37,7 +37,7 @@ class PhysicSystem : ContactListener {
     }
     fun PutComponent(physCmp: PhysicComponent, imageCmp: ImageComponent) {
         if (!physCmp.impulse.isZero) {
-            physCmp.body!!.applyLinearImpulse(physCmp.impulse, physCmp.body.worldCenter, true)
+            physCmp.body!!.applyLinearImpulse(physCmp.impulse, physCmp.body!!.worldCenter, true)
             physCmp.impulse.setZero()
         }
         val vect = physCmp.body!!.position
@@ -63,7 +63,7 @@ class PhysicSystem : ContactListener {
             physicCmp.prevPos.set(physicCmp.body!!.position)
 
             if (!physicCmp.impulse.isZero) {
-                physicCmp.body.applyLinearImpulse(physicCmp.impulse, physicCmp.body.worldCenter, true)
+                physicCmp.body!!.applyLinearImpulse(physicCmp.impulse, physicCmp.body!!.worldCenter, true)
                 physicCmp.impulse.setZero()
             }
         }

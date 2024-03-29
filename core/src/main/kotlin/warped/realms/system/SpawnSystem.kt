@@ -124,53 +124,64 @@ class SpawnSystem : IHandleEvent {
             128,
             128
         )
-        val image = ImageComponent(
-            Image(texture).apply {
+        val imgCmp = fun ImageComponent.() = this.apply {
+            this.image = Image(texture).apply {
                 setPosition(cordX, cordY)
                 setSize(width, height)
                 setScaling(Scaling.fill)
             }
-        )
-        val clCmp: (() -> TiledComponent)? = when (bodyType) {
-            BodyType.StaticBody -> { -> TiledComponent() }
+        }
+        val anCmp = fun AnimationComponent.() = this.apply {
+            this.nextAnimation(
+                model,
+                AnimationType.IDLE
+            )
+        }
+        val trCmp = fun TransformComponent.() = this.apply {
+            location = vec2(cordX, cordY)
+        }
+        val physCmp = fun PhysicComponent.() = this.apply {
+            val a = physicCmpFromImage(
+                phWorld,
+                Image(texture).apply {
+                    setPosition(cordX, cordY)
+                    setSize(width, height)
+                    setScaling(Scaling.fill)
+                },
+                bodyType
+            ) { phCmp, width, height ->
+                val w = width * physicScaling.x
+                val h = height * physicScaling.y
+                //hit box
+                box(w, h, physicOffset) {
+                    isSensor = bodyType != BodyType.StaticBody
+                }
+                if (bodyType != BodyType.StaticBody) {
+                    //collision box
+                    val collH = h * 0.4f
+                    val collOffset = vec2().apply { set(physicOffset) }
+                    collOffset.y -= h * 0.5f - collH * 0.5f
+                    //box(w,collH,collOffset)
+                    box(w, collH, physicOffset)
+                }
+            }
+            this.a()
+                .also { this.body!!.userData = this }
+        }
+        val mvCmp = fun MoveComponent.() = this.apply {
+            this.speed = speed
+        }
+        //val sum = fun Int.(other: Int): Int = this + other
+        val clCmp: (TiledComponent.() -> TiledComponent)? = when (bodyType) {
+            BodyType.StaticBody -> fun TiledComponent.() = this
             else -> null
         }
         return GameEntity(
-            {
-                image
-            }, {
-                AnimationComponent().apply {
-                    this.nextAnimation(
-                        model,
-                        AnimationType.IDLE
-                    )
-                }
-            }, {
-                TransformComponent(vec2(cordX, cordY))
-            }, {
-                physicCmpFromImage(
-                    phWorld,
-                    image.image,
-                    bodyType
-                ) { phCmp, width, height ->
-                    val w = width * physicScaling.x
-                    val h = height * physicScaling.y
-                    //hit box
-                    box(w, h, physicOffset) {
-                        isSensor = bodyType != BodyType.StaticBody
-                    }
-                    if (bodyType != BodyType.StaticBody) {
-                        //collision box
-                        val collH = h * 0.4f
-                        val collOffset = vec2().apply { set(physicOffset) }
-                        collOffset.y -= h * 0.5f - collH * 0.5f
-                        //box(w,collH,collOffset)
-                        box(w, collH, physicOffset)
-                    }
-                }.apply { this.body!!.userData = this }
-            }, {
-                MoveComponent(speed)
-            },
+            imgCmp,
+            anCmp,
+            trCmp,
+            physCmp,
+            mvCmp,
             clCmp
         )
     }
@@ -180,9 +191,9 @@ class SpawnSystem : IHandleEvent {
         image: Image,
         bodyType: BodyDef.BodyType,
         fixtureAction: BodyDefinition.(PhysicComponent, Float, Float) -> Unit
-    ): PhysicComponent {
+    ): PhysicComponent.() -> PhysicComponent {
         lateinit var bodyDefinition: BodyDefinition
-        return PhysicComponent(
+        return fun PhysicComponent.() = this.apply {
             body = world.body(bodyType) {
                 position.set(vec2(image.x + image.width * 0.5f, image.y + image.height * 0.5f))
                 fixedRotation = true
@@ -190,7 +201,8 @@ class SpawnSystem : IHandleEvent {
                 bodyDefinition = this
                 bodyDefinition.fixtureAction(PhysicComponent(), image.width, image.height)
             }
-        ).also { bodyDefinition.fixtureAction(it, image.width, image.height) }
+            bodyDefinition.fixtureAction(this, image.width, image.height)
+        }
     }
     fun Dispose() {
         println("[DISPOSE] ${this::class.simpleName}")
