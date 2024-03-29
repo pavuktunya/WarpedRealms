@@ -39,12 +39,12 @@ class ServerRequest() {
 //        }
     }
 
-    init {
-        lock.lock()
-
-        got.start()
-        send.start()
-    }
+//    init {
+//        lock.lock()
+//
+//        got.start()
+//        send.start()
+//    }
 
     fun dispose() {
 //        lock.unlock()

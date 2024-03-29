@@ -24,10 +24,13 @@ import generated.systems.injectSys
 import ktx.box2d.BodyDefinition
 import ktx.box2d.body
 import warped.realms.entity.GameEntity
+import warped.realms.entity.mapper.EntityMapper
 import warped.realms.input.PlayerKeyboardInputProcessor
 import warped.realms.system.update.CameraSystem
 import warped.realms.system.update.PhysicSystem
 import warped.realms.system.update.RenderSystem
+import warped.realms.system.update.mapper.ServerDismapperSystem
+import warped.realms.system.update.mapper.ServerMapperSystem
 
 const val entityLayer = "entities"
 
@@ -51,6 +54,9 @@ class SpawnSystem : IHandleEvent {
         ).apply {
             input(this)
         }.also {
+            injectSys<ServerMapperSystem>().PutComponent(EntityMapper(it))
+            injectSys<ServerDismapperSystem>().PutComponent(EntityMapper(it))
+
             Logger.debug { "Player has spawned with size: ${size(AnimationModel.FANTAZY_WARRIOR)}!" }
         }
         entityType.RAT -> createEntity(

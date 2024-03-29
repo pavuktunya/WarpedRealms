@@ -9,9 +9,19 @@ class ServerConnector() {
     val server_builder = ServerBuilder()
 
     init {
-        println("Server Connector")
+        println("==========Server To Connect==========")
     }
-    fun dispose() {
+
+    fun push(p: ByteArray): Boolean {
+        return true
+    }
+
+    fun pop(): ByteArray {
+        val b = byteArrayOf(0, 0, 0, 0, 0)
+        return b
+    }
+
+    fun Dispose() {
         serverRequest.dispose()
         server_builder.dispose()
     }

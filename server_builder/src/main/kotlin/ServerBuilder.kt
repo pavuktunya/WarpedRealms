@@ -27,7 +27,7 @@ class ServerBuilder() {
 
     init {
         lock.lock()
-        println("Server Builder")
+        println("==========Server Builder==========")
         //t0.start()
         //t1.start()
     }
