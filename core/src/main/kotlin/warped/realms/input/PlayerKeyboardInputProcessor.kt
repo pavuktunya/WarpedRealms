@@ -6,6 +6,8 @@ import ktx.app.KtxInputAdapter
 import ktx.log.logger
 import warped.realms.component.MoveComponent
 import System
+import generated.systems.injectSys
+import warped.realms.system.update.mapper.ServerMapperSystem
 
 @System
 class PlayerKeyboardInputProcessor : KtxInputAdapter {

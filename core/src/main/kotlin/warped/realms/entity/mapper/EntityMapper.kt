@@ -27,12 +27,12 @@ class EntityMapper(
     }
 
     fun dismapEntity(p: ByteArray) {
-        moveMapper.mapperCmp.dismap(p.copyOfRange(0, MoveMapper.SIZE_ARRAY))
-        transMapper.mapperCmp.dismap(
-            p.copyOfRange(
-                MoveMapper.SIZE_ARRAY + 1,
-                TransformMapper.SIZE_ARRAY + MoveMapper.SIZE_ARRAY
-            )
-        )
+//        moveMapper.mapperCmp.dismap(p.copyOfRange(0, MoveMapper.SIZE_ARRAY))
+//        transMapper.mapperCmp.dismap(
+//            p.copyOfRange(
+//                MoveMapper.SIZE_ARRAY + 1,
+//                TransformMapper.SIZE_ARRAY + MoveMapper.SIZE_ARRAY
+//            )
+//        )
     }
 }

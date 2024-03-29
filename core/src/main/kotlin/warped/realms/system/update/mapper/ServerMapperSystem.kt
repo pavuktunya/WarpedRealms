@@ -7,6 +7,7 @@ import warped.realms.component.ImageComponent
 import warped.realms.entity.mapper.EntityMapper
 
 @System
+@Update(11)
 class ServerMapperSystem {
     private val entityMappers = mutableListOf<EntityMapper>()
     lateinit var serverConnector: ServerConnector
@@ -15,7 +16,6 @@ class ServerMapperSystem {
         entityMappers.forEach { it.Update() }
         serverConnector.push(entityMappers.push())
     }
-
     fun PutComponent(cmp: EntityMapper) {
         entityMappers.add(cmp)
     }
