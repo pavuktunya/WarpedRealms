@@ -14,7 +14,7 @@ class ClientRequest() {
             println("[SERVER]-Try Get $data + ${java.time.LocalTime.now()}")
             //data = getterRequest.getData()
             data++
-            Thread.sleep(1000)
+            Thread.sleep(500)
         }
     }
     val threadSend = Thread {
