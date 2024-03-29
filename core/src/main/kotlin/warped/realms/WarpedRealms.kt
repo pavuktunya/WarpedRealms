@@ -17,7 +17,7 @@ class WarpedRealms : KtxGame<KtxScreen>() {
         setScreen<Screen>()
     }
     override fun dispose() {
-        serverConnector.Dispose()
+        serverConnector.dispose()
         super.dispose()
     }
 }

@@ -2,6 +2,9 @@ package server_connector.request
 
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.http.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import ktx.log.logger
 import server_connector.getter.GetterRequest
 import server_connector.getter.IGetRequest
@@ -13,9 +16,9 @@ import java.util.concurrent.locks.ReentrantLock
 class ServerRequest() {
     val serverQueue: ServerQueue = ServerQueue()
     val clientQueue: ServerQueue = ServerQueue()
-    val client = HttpClient{
-        install(WebSockets)
-    }
+//    val client = HttpClient{
+//        install(WebSockets)
+//    }
 
     private val setterRequest: ISetRequest = SetterRequest(clientQueue)
     private val getterRequest: IGetRequest = GetterRequest(serverQueue)
@@ -26,6 +29,7 @@ class ServerRequest() {
 ///
     }
     val send = Thread {
+
 //        runBlocking{
 //            client.webSocket(HttpMethod.Get, host = "127.0.0.1", port = 8000, path = "/gate") {
 //                var cord = 0
@@ -39,19 +43,22 @@ class ServerRequest() {
 //        }
     }
 
-//    init {
-//        lock.lock()
-//
-//        got.start()
-//        send.start()
-//    }
+    fun startConnection() {
+        lock.lock()
 
+        got.start()
+        send.start()
+    }
+
+    fun endConnection() {
+        lock.unlock()
+        serverQueue.stackEmptyCondition.signalAll()
+        got.join()
+        clientQueue.stackFullCondition.signalAll()
+        send.join()
+    }
     fun dispose() {
-//        lock.unlock()
-//        serverQueue.stackEmptyCondition.signalAll()
-//        got.join()
-//        clientQueue.stackFullCondition.signalAll()
-//        send.join()
+        endConnection()
     }
 
     companion object {

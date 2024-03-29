@@ -1,7 +1,5 @@
 package server_builder
 
-import server_builder.queue.ServerQueue
-import server_builder.request.ServerRequest
 import server_logic.ServerGameLogic
 import java.lang.Thread.sleep
 import java.util.concurrent.locks.ReentrantLock
@@ -22,12 +20,9 @@ class ServerBuilder() {
         }
         serverGameLogic.dispose()
     }
-
-    //private val t1 = Request(serverQueue, clientQueue, lock)
-
     init {
         lock.lock()
-        println("==========Server Builder==========")
+        println("==========Server Built==========")
         //t0.start()
         //t1.start()
     }
@@ -38,16 +33,5 @@ class ServerBuilder() {
 
         //t1.clientRequest.dispose()
         //t1.join()
-    }
-}
-
-class Request(
-    val serverQueue: ServerQueue,
-    val clientQueue: ServerQueue,
-    val lock: ReentrantLock
-) : Thread() {
-    lateinit var clientRequest: ServerRequest
-    override fun run() {
-        clientRequest = ServerRequest(serverQueue, clientQueue, lock)
     }
 }
