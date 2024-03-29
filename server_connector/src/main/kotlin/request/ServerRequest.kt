@@ -6,6 +6,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import ktx.log.logger
+import server_builder.ServerBuilder
 import server_connector.getter.GetterRequest
 import server_connector.getter.IGetRequest
 import server_connector.setter.ISetRequest
@@ -16,6 +17,9 @@ import java.util.concurrent.locks.ReentrantLock
 class ServerRequest() {
     val serverQueue: ServerQueue = ServerQueue()
     val clientQueue: ServerQueue = ServerQueue()
+
+    lateinit var serverBuilder: ServerBuilder
+
 //    val client = HttpClient{
 //        install(WebSockets)
 //    }

@@ -6,11 +6,11 @@ import server_connector.request.ServerRequest
 //Подключение к серверу, передача событий.
 class ServerConnector() {
     private val serverRequest = ServerRequest()
-    private val server_builder = ServerBuilder()
+    private val server_builder = ServerBuilder().also { serverRequest.serverBuilder = it }
 
     init {
         println("==========Server To Connect==========")
-        //serverRequest.startConnection()
+        serverRequest.startConnection()
     }
 
     fun push(p: ByteArray): Boolean {
